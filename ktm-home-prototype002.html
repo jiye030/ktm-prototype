@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KTM Mobile — Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --color-primary: #E8001C;
+  --color-primary-dark: #B50016;
+  --color-primary-light: #FFF0F0;
+  --color-black: #1A1A1A;
+  --color-gray-800: #333333;
+  --color-gray-600: #666666;
+  --color-gray-400: #999999;
+  --color-gray-200: #CCCCCC;
+  --color-gray-100: #EEEEEE;
+  --color-gray-50: #F5F5F5;
+  --color-white: #FFFFFF;
+  --color-success: #00A854;
+  --color-warning: #FAAD14;
+  --color-error: #F5222D;
+  --color-info: #1890FF;
+  --max-width: 1200px;
+  --gnb-height: 72px;
+  --font: 'Noto Sans KR', sans-serif;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); color: var(--color-gray-800); background: var(--color-white); line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+button { cursor: pointer; border: none; background: none; font-family: var(--font); }
+img { display: block; max-width: 100%; }
+
+/* ===== LAYOUT ===== */
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+/* ===== BUTTONS ===== */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 4px; font-weight: 700; transition: all 0.18s ease; cursor: pointer; border: none; font-family: var(--font); }
+.btn-primary { background: var(--color-primary); color: #fff; }
+.btn-primary:hover { background: var(--color-primary-dark); }
+.btn-secondary { background: #fff; color: var(--color-primary); border: 1.5px solid var(--color-primary); }
+.btn-secondary:hover { background: var(--color-primary-light); }
+.btn-ghost { background: transparent; color: var(--color-gray-800); border: 1.5px solid var(--color-gray-200); }
+.btn-ghost:hover { border-color: var(--color-gray-400); }
+.btn-dark { background: var(--color-black); color: #fff; }
+.btn-lg { height: 52px; font-size: 16px; padding: 0 32px; }
+.btn-md { height: 44px; font-size: 14px; padding: 0 24px; }
+.btn-sm { height: 36px; font-size: 13px; padding: 0 16px; }
+.btn-pill { border-radius: 50px; }
+.btn:active { transform: scale(0.98); }
+
+/* ===== BADGE ===== */
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
+.badge-popular { background: var(--color-primary); color: #fff; }
+.badge-new { background: var(--color-info); color: #fff; }
+.badge-recommend { background: var(--color-success); color: #fff; }
+.badge-ongoing { background: var(--color-success); color: #fff; }
+.badge-upcoming { background: var(--color-warning); color: #fff; }
+.badge-ended { background: var(--color-gray-400); color: #fff; }
+
+/* ===== GNB ===== */
+.gnb {
+  position: sticky; top: 0; z-index: 1000;
+  width: 100%; height: var(--gnb-height);
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-gray-100);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.gnb-inner {
+  max-width: var(--max-width); margin: 0 auto; padding: 0 24px;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
+}
+.gnb-logo {
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+  line-height: 1; letter-spacing: -0.5px;
+}
+.gnb-logo .logo-kt {
+  font-size: 28px; font-weight: 900; color: var(--color-black);
+  font-style: italic; letter-spacing: -1px;
+}
+.gnb-logo .logo-m-mobile {
+  font-size: 24px; font-weight: 900; color: var(--color-primary);
+  letter-spacing: -0.5px;
+}
+
+/* Main nav */
+.gnb-nav { display: flex; align-items: center; height: 100%; }
+.gnb-nav > li { position: relative; height: 100%; }
+.gnb-nav > li > a {
+  display: flex; align-items: center; height: 100%;
+  padding: 0 20px; font-size: 15px; font-weight: 700;
+  color: var(--color-gray-800); transition: color 0.15s;
+  white-space: nowrap;
+}
+.gnb-nav > li > a:hover, .gnb-nav > li:hover > a { color: var(--color-primary); }
+.gnb-nav > li > a::after { content: ''; display: block; position: absolute; bottom: 0; left: 20px; right: 20px; height: 2px; background: var(--color-primary); transform: scaleX(0); transition: transform 0.2s; }
+.gnb-nav > li:hover > a::after { transform: scaleX(1); }
+
+/* Dropdown */
+.gnb-dropdown {
+  position: absolute; top: calc(var(--gnb-height) - 1px); left: 0;
+  min-width: 220px; background: #fff;
+  border: 1px solid var(--color-gray-100); border-top: 2px solid var(--color-primary);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: all 0.2s ease;
+  padding: 8px 0;
+}
+.gnb-nav > li:hover .gnb-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.gnb-dropdown .group-label { padding: 10px 18px 4px; font-size: 11px; font-weight: 700; color: var(--color-gray-400); letter-spacing: 0.5px; text-transform: uppercase; }
+.gnb-dropdown li a { display: block; padding: 9px 18px; font-size: 13.5px; color: var(--color-gray-800); transition: all 0.12s; }
+.gnb-dropdown li a:hover { background: var(--color-gray-50); color: var(--color-primary); padding-left: 24px; }
+.gnb-dropdown hr { border: none; border-top: 1px solid var(--color-gray-100); margin: 4px 0; }
+
+/* Utility */
+.gnb-utils { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.gnb-utils a { font-size: 13px; color: var(--color-gray-600); padding: 6px 8px; border-radius: 4px; white-space: nowrap; transition: all 0.15s; }
+.gnb-utils a:hover { color: var(--color-primary); background: var(--color-primary-light); }
+.gnb-utils .btn-login { background: var(--color-primary); color: #fff; padding: 7px 16px; border-radius: 4px; font-size: 13px; font-weight: 700; margin-left: 4px; transition: background 0.15s; }
+.gnb-utils .btn-login:hover { background: var(--color-primary-dark); }
+.gnb-utils .btn-search { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 4px; color: var(--color-gray-600); transition: all 0.15s; margin-left: 2px; }
+.gnb-utils .btn-search:hover { background: var(--color-gray-50); color: var(--color-primary); }
+
+
+.banner-img-slide { background: #000; }
+.banner-img-slide img { display: block; }
+
+/* ===== SECTION A — MAIN BANNER ===== */
+.banner-section { position: relative; overflow: hidden; background: var(--color-black); }
+.banner-slides { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.banner-slide {
+  flex: 0 0 100%; width: 100%; height: 500px;
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+}
+.banner-slide-1 { background: linear-gradient(135deg, #1a0a0a 0%, #3d0010 40%, var(--color-primary) 100%); }
+.banner-slide-2 { background: linear-gradient(135deg, #0a1628 0%, #1a3a6e 50%, #2563eb 100%); }
+.banner-slide-3 { background: linear-gradient(135deg, #0d1f12 0%, #1a4024 50%, #16a34a 100%); }
+.banner-deco {
+  position: absolute; right: 0; top: 0; width: 55%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.15;
+}
+.banner-deco-circle {
+  width: 420px; height: 420px; border-radius: 50%;
+  border: 80px solid rgba(255,255,255,0.3);
+  position: absolute; right: -80px;
+}
+.banner-deco-circle2 {
+  width: 240px; height: 240px; border-radius: 50%;
+  border: 40px solid rgba(255,255,255,0.2);
+  position: absolute; right: 140px; top: 40px;
+}
+.banner-content { position: relative; z-index: 2; padding: 0 80px; color: #fff; }
+.banner-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: 0.7; margin-bottom: 16px; }
+.banner-title { font-size: 48px; font-weight: 900; line-height: 1.15; margin-bottom: 16px; letter-spacing: -1.5px; }
+.banner-title em { color: #ff6b6b; font-style: normal; }
+.banner-slide-2 .banner-title em { color: #60a5fa; }
+.banner-slide-3 .banner-title em { color: #4ade80; }
+.banner-desc { font-size: 16px; opacity: 0.8; margin-bottom: 32px; line-height: 1.7; }
+.banner-cta { display: flex; gap: 12px; }
+.banner-cta .btn-white { background: #fff; color: var(--color-primary); height: 52px; padding: 0 32px; border-radius: 4px; font-size: 15px; font-weight: 700; transition: all 0.15s; }
+.banner-cta .btn-white:hover { background: rgba(255,255,255,0.9); transform: translateY(-1px); }
+.banner-cta .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); height: 52px; padding: 0 28px; border-radius: 4px; font-size: 15px; font-weight: 700; transition: all 0.15s; display: flex; align-items: center; }
+.banner-cta .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+
+/* Banner controls */
+.banner-indicators {
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 10;
+}
+.banner-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4);
+  cursor: pointer; transition: all 0.2s; border: none;
+}
+.banner-dot.active { background: #fff; width: 24px; border-radius: 4px; }
+.banner-pause-btn {
+  position: absolute; bottom: 20px; right: 24px; z-index: 10;
+  background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+  color: #fff; width: 32px; height: 32px; border-radius: 4px;
+  font-size: 14px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.15s;
+}
+.banner-pause-btn:hover { background: rgba(255,255,255,0.3); }
+.banner-prev, .banner-next {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: #fff; width: 44px; height: 44px; border-radius: 50%;
+  font-size: 18px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s; backdrop-filter: blur(4px);
+}
+.banner-prev:hover, .banner-next:hover { background: rgba(255,255,255,0.3); }
+.banner-prev { left: 24px; }
+.banner-next { right: 24px; }
+
+/* ===== SECTION B — QUICK SIGNUP BAR ===== */
+.quick-bar { background: var(--color-primary); }
+.quick-bar-inner {
+  max-width: var(--max-width); margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  height: 80px;
+}
+.quick-bar-item {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  color: #fff; font-size: 15px; font-weight: 700;
+  border-right: 1px solid rgba(255,255,255,0.2);
+  transition: background 0.15s; cursor: pointer; padding: 0 16px;
+}
+.quick-bar-item:last-child { border-right: none; }
+.quick-bar-item:hover { background: rgba(255,255,255,0.12); }
+.quick-bar-icon {
+  width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ===== SECTION C — 추천 요금제 ===== */
+.section { padding: 72px 0; }
+.section-alt { background: var(--color-gray-50); }
+.section-header { text-align: center; margin-bottom: 40px; }
+.section-eyebrow { font-size: 12px; font-weight: 700; color: var(--color-primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.section-title { font-size: 32px; font-weight: 900; color: var(--color-black); letter-spacing: -1px; }
+.section-desc { margin-top: 10px; font-size: 15px; color: var(--color-gray-600); }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--color-gray-100); margin-bottom: 40px; justify-content: center; }
+.tab-btn {
+  padding: 12px 32px; font-size: 15px; font-weight: 700;
+  color: var(--color-gray-400); border: none; background: none;
+  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: all 0.15s;
+}
+.tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+.tab-btn:hover:not(.active) { color: var(--color-gray-800); }
+
+/* Plan cards */
+.plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.plan-card {
+  background: #fff; border: 1.5px solid var(--color-gray-100); border-radius: 12px;
+  padding: 28px 24px; display: flex; flex-direction: column;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.plan-card:hover { border-color: var(--color-primary); box-shadow: 0 8px 32px rgba(232,0,28,0.1); transform: translateY(-2px); }
+.plan-card.featured { border-color: var(--color-primary); }
+.plan-card.featured::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--color-primary);
+}
+.plan-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+.plan-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+.plan-name { font-size: 17px; font-weight: 900; color: var(--color-black); margin: 12px 0 8px; }
+.plan-price { display: flex; align-items: baseline; gap: 2px; margin-bottom: 16px; }
+.plan-price-amount { font-size: 36px; font-weight: 900; color: var(--color-primary); letter-spacing: -1px; }
+.plan-price-unit { font-size: 14px; color: var(--color-gray-600); margin-left: 2px; }
+.plan-specs { border-top: 1px solid var(--color-gray-100); padding-top: 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.plan-spec { display: flex; justify-content: space-between; align-items: center; }
+.plan-spec-label { font-size: 13px; color: var(--color-gray-600); }
+.plan-spec-value { font-size: 13px; font-weight: 700; color: var(--color-black); }
+.plan-card .btn { width: 100%; margin-top: auto; }
+
+/* View more */
+.section-footer { text-align: center; margin-top: 40px; }
+
+/* ===== SECTION D — HOT 이벤트 ===== */
+.event-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.event-card {
+  background: #fff; border-radius: 12px; overflow: hidden;
+  border: 1.5px solid var(--color-gray-100);
+  transition: all 0.2s; cursor: pointer;
+}
+.event-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); border-color: var(--color-gray-200); }
+.event-thumb {
+  height: 160px; display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.event-thumb-1 { background: linear-gradient(135deg, #ff6b6b, var(--color-primary)); }
+.event-thumb-2 { background: linear-gradient(135deg, #667eea, #764ba2); }
+.event-thumb-3 { background: linear-gradient(135deg, #11998e, #38ef7d); }
+.event-thumb-emoji { font-size: 56px; }
+.event-thumb-badge { position: absolute; top: 12px; left: 12px; }
+.event-body { padding: 18px 20px; }
+.event-title { font-size: 15px; font-weight: 700; color: var(--color-black); margin-bottom: 8px; line-height: 1.4; }
+.event-period { font-size: 12px; color: var(--color-gray-400); }
+
+/* ===== SECTION E — 서비스 특징 ===== */
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.feature-card {
+  background: #fff; border-radius: 16px; padding: 36px 28px;
+  text-align: center; border: 1.5px solid var(--color-gray-100);
+  transition: all 0.2s;
+}
+.feature-card:hover { border-color: var(--color-primary); box-shadow: 0 8px 32px rgba(232,0,28,0.08); }
+.feature-icon {
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.feature-icon-1 { background: var(--color-primary-light); }
+.feature-icon-2 { background: #e8f4fd; }
+.feature-icon-3 { background: #e8fdf1; }
+.feature-title { font-size: 18px; font-weight: 900; color: var(--color-black); margin-bottom: 10px; }
+.feature-desc { font-size: 14px; color: var(--color-gray-600); line-height: 1.7; }
+
+/* ===== SECTION F — 고객 후기 ===== */
+.review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.review-card {
+  background: #fff; border-radius: 12px; padding: 24px;
+  border: 1.5px solid var(--color-gray-100); transition: all 0.2s;
+}
+.review-card:hover { border-color: var(--color-gray-200); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.review-stars { color: var(--color-warning); font-size: 16px; margin-bottom: 12px; letter-spacing: 2px; }
+.review-plan { font-size: 12px; font-weight: 700; color: var(--color-primary); background: var(--color-primary-light); padding: 3px 8px; border-radius: 3px; display: inline-block; margin-bottom: 12px; }
+.review-text { font-size: 14px; color: var(--color-gray-800); line-height: 1.7; margin-bottom: 16px; }
+.review-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--color-gray-100); }
+.review-author { font-size: 13px; font-weight: 700; color: var(--color-gray-600); }
+.review-date { font-size: 12px; color: var(--color-gray-400); }
+
+/* ===== SECTION G — 앱 다운로드 ===== */
+.app-section {
+  background: var(--color-black);
+  padding: 72px 0;
+}
+.app-inner {
+  max-width: var(--max-width); margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center;
+}
+.app-text .eyebrow { font-size: 12px; font-weight: 700; color: var(--color-primary); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+.app-text h2 { font-size: 36px; font-weight: 900; color: #fff; letter-spacing: -1px; line-height: 1.2; margin-bottom: 12px; }
+.app-text p { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 32px; }
+.app-btns { display: flex; gap: 12px; }
+.app-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
+  color: #fff; padding: 12px 24px; border-radius: 8px; transition: all 0.15s; cursor: pointer;
+}
+.app-btn:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); }
+.app-btn-icon { font-size: 28px; }
+.app-btn-text .store { font-size: 11px; opacity: 0.6; }
+.app-btn-text .name { font-size: 16px; font-weight: 700; }
+.app-qr {
+  background: #fff; border-radius: 12px; padding: 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.qr-placeholder {
+  width: 120px; height: 120px; background: var(--color-gray-50);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--color-gray-400); border: 1px dashed var(--color-gray-200);
+  border-radius: 8px; text-align: center; padding: 8px;
+}
+.app-qr p { font-size: 12px; color: var(--color-gray-600); text-align: center; }
+
+/* ===== FOOTER ===== */
+.footer { background: var(--color-black); }
+.footer-family {
+  border-bottom: 1px solid #333; padding: 16px 0;
+}
+.footer-family-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+.family-dropdown-btn {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: #aaa; cursor: pointer;
+  background: none; border: 1px solid #333; padding: 8px 16px; border-radius: 4px;
+  transition: all 0.15s; font-family: var(--font);
+}
+.family-dropdown-btn:hover { border-color: #555; color: #ccc; }
+
+.footer-links { border-bottom: 1px solid #2a2a2a; padding: 20px 0; }
+.footer-links-inner {
+  max-width: var(--max-width); margin: 0 auto; padding: 0 24px;
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.footer-links-inner a { font-size: 13px; color: #aaa; transition: color 0.15s; }
+.footer-links-inner a:hover { color: #fff; }
+.footer-links-inner a.bold { font-weight: 700; color: #ccc; }
+
+.footer-bottom {
+  max-width: var(--max-width); margin: 0 auto; padding: 32px 24px;
+  display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: start;
+}
+.footer-logo { display: flex; align-items: center; gap: 4px; margin-bottom: 16px; line-height: 1; }
+.footer-logo .logo-kt { font-size: 26px; font-weight: 900; color: #fff; font-style: italic; letter-spacing: -1px; }
+.footer-logo .logo-m-mobile { font-size: 22px; font-weight: 900; color: var(--color-primary); letter-spacing: -0.5px; }
+.footer-info p { font-size: 12px; color: #777; line-height: 2; }
+.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+.footer-sns { display: flex; gap: 8px; }
+.sns-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid #444; background: none; color: #aaa; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: all 0.15s; font-family: var(--font);
+}
+.sns-btn:hover { border-color: #aaa; color: #fff; }
+.footer-copyright { font-size: 12px; color: #555; text-align: right; }
+
+/* ===== SCROLL TOP ===== */
+.scroll-top {
+  position: fixed; bottom: 32px; right: 32px; z-index: 999;
+  width: 44px; height: 44px; border-radius: 8px;
+  background: var(--color-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; border: none;
+  box-shadow: 0 4px 16px rgba(232,0,28,0.35);
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: all 0.2s; font-family: var(--font);
+}
+.scroll-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.scroll-top:hover { background: var(--color-primary-dark); }
+
+/* Tab pane */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* Animations */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.banner-content { animation: fadeSlideUp 0.7s ease forwards; }
+</style>
+</head>
+<body>
+
+<!-- GNB -->
+<header class="gnb">
+  <div class="gnb-inner">
+    <!-- Logo -->
+    <a href="/" class="gnb-logo"><span class="logo-kt">kt</span><span class="logo-m-mobile">M mobile</span></a>
+
+    <!-- Main Nav -->
+    <nav>
+      <ul class="gnb-nav">
+        <li>
+          <a href="/apply">가입하기</a>
+          <ul class="gnb-dropdown">
+            <li class="group-label">USIM</li>
+            <li><a href="/apply/without-usim">유심 없이 가입</a></li>
+            <li><a href="/apply/with-usim">유심 있이 가입</a></li>
+            <hr>
+            <li><a href="/apply/esim">eSIM 가입</a></li>
+            <li><a href="/apply/watch">워치 개통</a></li>
+            <hr>
+            <li class="group-label">유심구매</li>
+            <li><a href="/apply/order-usim">다이렉트몰</a></li>
+            <li><a href="/direct/open-market">오픈마켓</a></li>
+            <li><a href="/direct/store">편의점·마트</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/rate/list">상품</a>
+          <ul class="gnb-dropdown">
+            <li class="group-label">요금제</li>
+            <li><a href="/rate/list">요금제 소개</a></li>
+            <li><a href="/rate/compare">요금제 비교</a></li>
+            <hr>
+            <li class="group-label">부가서비스</li>
+            <li><a href="/rate/addon">전체 부가서비스</a></li>
+            <li><a href="/rate/roaming">해외 로밍</a></li>
+            <hr>
+            <li class="group-label">추가서비스</li>
+            <li><a href="/rate/share">함께쓰기</a></li>
+            <li><a href="/rate/data-sharing">데이터쉐어링</a></li>
+            <li><a href="/rate/insurance">휴대폰안심보험</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/benefit">혜택</a>
+          <ul class="gnb-dropdown">
+            <li class="group-label">이벤트</li>
+            <li><a href="/event/list">이번달 이벤트</a></li>
+            <li><a href="/event/winner">당첨자 확인</a></li>
+            <hr>
+            <li class="group-label">참여 혜택</li>
+            <li><a href="/event/friend-invite">친구 초대</a></li>
+            <li><a href="/event/review">가입 리뷰 작성</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/combine">결합</a>
+          <ul class="gnb-dropdown">
+            <li><a href="/combine/solo">아무나 SOLO 결합</a></li>
+            <li><a href="/combine/family">아무나 가족 결합+</a></li>
+            <li><a href="/combine/kt-internet">KT인터넷 트리플 할인</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/cs">고객센터</a>
+          <ul class="gnb-dropdown">
+            <li class="group-label">이용·공지</li>
+            <li><a href="/cs/notice">공지사항</a></li>
+            <li><a href="/cs/guide">개통 가이드</a></li>
+            <hr>
+            <li class="group-label">FAQ·고객문의</li>
+            <li><a href="/cs/faq">자주 묻는 질문</a></li>
+            <li><a href="/cs/inquiry">1:1 상담문의</a></li>
+            <li><a href="/cs/booking">상담 예약</a></li>
+            <hr>
+            <li class="group-label">셀프서비스</li>
+            <li><a href="/cs/self/inquiry">서비스 조회·변경</a></li>
+            <li><a href="/cs/self/charge">요금 조회·납부</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Utility -->
+    <div class="gnb-utils">
+      <a href="/apply/replace-usim">교체유심신청</a>
+      <a href="/order/list">신청조회</a>
+      <a href="/mypage">마이페이지</a>
+      <a href="/login" class="btn-login">로그인</a>
+      <button class="btn-search" aria-label="검색">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Section A: Main Banner -->
+<section class="banner-section">
+  <div class="banner-slides" id="bannerSlides">
+    <div class="banner-slide banner-img-slide">
+      <a href="https://www.ktmmobile.com/event/eventDetail.do?ntcartSeq=1490&sbstCtg=E&eventBranch=E" target="_blank" style="display:block;width:100%;height:100%;">
+        <img src="https://www.ktmmobile.com/resources/upload/banner/2026021300070504329Bg0b.png" alt="배너 1" style="width:100%;height:100%;object-fit:cover;object-position:center;">
+      </a>
+    </div>
+    <div class="banner-slide banner-img-slide">
+      <a href="https://www.ktmmobile.com/event/eventDetail.do?ntcartSeq=1788&sbstCtg=E&pageNo=1" target="_blank" style="display:block;width:100%;height:100%;">
+        <img src="https://www.ktmmobile.com/resources/upload/banner/202602282353150631BafXq.png" alt="배너 2" style="width:100%;height:100%;object-fit:cover;object-position:center;">
+      </a>
+    </div>
+    <div class="banner-slide banner-img-slide">
+      <a href="https://www.ktmmobile.com/event/eventDetail.do?ntcartSeq=1686&sbstCtg=E&eventBranch=E" target="_blank" style="display:block;width:100%;height:100%;">
+        <img src="https://www.ktmmobile.com/resources/upload/banner/2025051916220000132bWCA.png" alt="배너 3" style="width:100%;height:100%;object-fit:cover;object-position:center;">
+      </a>
+    </div>
+    <div class="banner-slide banner-img-slide">
+      <a href="https://www.ktmmobile.com/content/dataSharingStep1.do" target="_blank" style="display:block;width:100%;height:100%;">
+        <img src="https://www.ktmmobile.com/resources/upload/banner/202504010016200019zGiEz.png" alt="배너 4" style="width:100%;height:100%;object-fit:cover;object-position:center;">
+      </a>
+    </div>
+  </div>
+  <!-- Controls -->
+  <div class="banner-indicators" id="bannerDots">
+    <button class="banner-dot active" onclick="goToSlide(0)"></button>
+    <button class="banner-dot" onclick="goToSlide(1)"></button>
+    <button class="banner-dot" onclick="goToSlide(2)"></button>
+    <button class="banner-dot" onclick="goToSlide(3)"></button>
+    </div>
+  <button class="banner-prev" onclick="prevSlide()">‹</button>
+  <button class="banner-next" onclick="nextSlide()">›</button>
+  <button class="banner-pause-btn" id="pauseBtn" onclick="togglePause()">⏸</button>
+</section>
+
+<!-- Section B: Quick Signup Bar -->
+<section class="quick-bar">
+  <div class="quick-bar-inner">
+    <a href="/apply/without-usim" class="quick-bar-item">
+      <div class="quick-bar-icon">📦</div>
+      <span>유심 없이 가입</span>
+    </a>
+    <a href="/apply/with-usim" class="quick-bar-item">
+      <div class="quick-bar-icon">📱</div>
+      <span>유심 있이 가입</span>
+    </a>
+    <a href="/apply/esim" class="quick-bar-item">
+      <div class="quick-bar-icon">💳</div>
+      <span>eSIM 가입</span>
+    </a>
+    <a href="/rate/list" class="quick-bar-item">
+      <div class="quick-bar-icon">📋</div>
+      <span>요금제 보기</span>
+    </a>
+  </div>
+</section>
+
+<!-- Section C: 이달의 추천 요금제 -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">이달의 추천</p>
+      <h2 class="section-title">인기 요금제</h2>
+      <p class="section-desc">나에게 맞는 요금제를 찾아보세요</p>
+    </div>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this, 'usim')">유심 요금제</button>
+      <button class="tab-btn" onclick="switchTab(this, 'phone')">휴대폰 요금제</button>
+    </div>
+    <!-- Tab: 유심 요금제 -->
+    <div class="tab-pane active" id="tab-usim">
+      <div class="plan-grid">
+        <div class="plan-card">
+          <div class="plan-card-top">
+            <div class="plan-badges"><span class="badge badge-new">NEW</span></div>
+          </div>
+          <div class="plan-name">데이터 1GB</div>
+          <div class="plan-price">
+            <span class="plan-price-amount">9,900</span>
+            <span class="plan-price-unit">원/월</span>
+          </div>
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-label">데이터</span><span class="plan-spec-value">1GB (소진 후 1Mbps)</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">음성통화</span><span class="plan-spec-value">무제한</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">문자</span><span class="plan-spec-value">기본 제공</span></div>
+          </div>
+          <button class="btn btn-secondary btn-md">가입하기</button>
+        </div>
+        <div class="plan-card featured">
+          <div class="plan-card-top">
+            <div class="plan-badges"><span class="badge badge-popular">인기</span><span class="badge badge-recommend">추천</span></div>
+          </div>
+          <div class="plan-name">데이터 3GB</div>
+          <div class="plan-price">
+            <span class="plan-price-amount">19,900</span>
+            <span class="plan-price-unit">원/월</span>
+          </div>
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-label">데이터</span><span class="plan-spec-value">3GB (소진 후 1Mbps)</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">음성통화</span><span class="plan-spec-value">무제한</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">문자</span><span class="plan-spec-value">기본 제공</span></div>
+          </div>
+          <button class="btn btn-primary btn-md">가입하기</button>
+        </div>
+        <div class="plan-card">
+          <div class="plan-card-top">
+            <div class="plan-badges"></div>
+          </div>
+          <div class="plan-name">데이터 10GB</div>
+          <div class="plan-price">
+            <span class="plan-price-amount">29,900</span>
+            <span class="plan-price-unit">원/월</span>
+          </div>
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-label">데이터</span><span class="plan-spec-value">10GB (소진 후 1Mbps)</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">음성통화</span><span class="plan-spec-value">무제한</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">문자</span><span class="plan-spec-value">기본 제공</span></div>
+          </div>
+          <button class="btn btn-secondary btn-md">가입하기</button>
+        </div>
+      </div>
+    </div>
+    <!-- Tab: 휴대폰 요금제 -->
+    <div class="tab-pane" id="tab-phone">
+      <div class="plan-grid">
+        <div class="plan-card">
+          <div class="plan-card-top"><div class="plan-badges"><span class="badge badge-new">NEW</span></div></div>
+          <div class="plan-name">휴대폰 베이직</div>
+          <div class="plan-price"><span class="plan-price-amount">24,900</span><span class="plan-price-unit">원/월</span></div>
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-label">데이터</span><span class="plan-spec-value">5GB</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">음성통화</span><span class="plan-spec-value">무제한</span></div>
+          </div>
+          <button class="btn btn-secondary btn-md">가입하기</button>
+        </div>
+        <div class="plan-card featured">
+          <div class="plan-card-top"><div class="plan-badges"><span class="badge badge-popular">인기</span></div></div>
+          <div class="plan-name">휴대폰 스탠다드</div>
+          <div class="plan-price"><span class="plan-price-amount">34,900</span><span class="plan-price-unit">원/월</span></div>
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-label">데이터</span><span class="plan-spec-value">15GB</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">음성통화</span><span class="plan-spec-value">무제한</span></div>
+          </div>
+          <button class="btn btn-primary btn-md">가입하기</button>
+        </div>
+        <div class="plan-card">
+          <div class="plan-card-top"><div class="plan-badges"></div></div>
+          <div class="plan-name">휴대폰 프리미엄</div>
+          <div class="plan-price"><span class="plan-price-amount">44,900</span><span class="plan-price-unit">원/월</span></div>
+          <div class="plan-specs">
+            <div class="plan-spec"><span class="plan-spec-label">데이터</span><span class="plan-spec-value">데이터 무제한</span></div>
+            <div class="plan-spec"><span class="plan-spec-label">음성통화</span><span class="plan-spec-value">무제한</span></div>
+          </div>
+          <button class="btn btn-secondary btn-md">가입하기</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-footer">
+      <a href="/rate/list" class="btn btn-ghost btn-md">요금제 전체 보기 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Section D: HOT 이벤트 -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">HOT</p>
+      <h2 class="section-title">진행 중인 이벤트</h2>
+      <p class="section-desc">놓치면 아쉬운 혜택들을 확인해보세요</p>
+    </div>
+    <div class="event-grid">
+      <div class="event-card">
+        <div class="event-thumb event-thumb-1">
+          <div class="event-thumb-badge"><span class="badge badge-ongoing">진행중</span></div>
+          <div class="event-thumb-emoji">🎁</div>
+        </div>
+        <div class="event-body">
+          <h3 class="event-title">신규 가입 첫 달 요금 50% 할인</h3>
+          <p class="event-period">2026.03.01 – 2026.03.31</p>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-thumb event-thumb-2">
+          <div class="event-thumb-badge"><span class="badge badge-ongoing">진행중</span></div>
+          <div class="event-thumb-emoji">👫</div>
+        </div>
+        <div class="event-body">
+          <h3 class="event-title">친구 초대하고 최대 1만원 적립금 받기</h3>
+          <p class="event-period">2026.02.01 – 2026.04.30</p>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-thumb event-thumb-3">
+          <div class="event-thumb-badge"><span class="badge badge-upcoming">예정</span></div>
+          <div class="event-thumb-emoji">⭐</div>
+        </div>
+        <div class="event-body">
+          <h3 class="event-title">가입 후 리뷰 작성하면 스타벅스 쿠폰 증정</h3>
+          <p class="event-period">2026.04.01 – 2026.04.30</p>
+        </div>
+      </div>
+    </div>
+    <div class="section-footer">
+      <a href="/event/list" class="btn btn-ghost btn-md">이벤트 전체 보기 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Section E: 서비스 특징 -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Why KTM</p>
+      <h2 class="section-title">KTM을 선택해야 하는 이유</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-1">📡</div>
+        <h3 class="feature-title">KT망 그대로 사용</h3>
+        <p class="feature-desc">전국 어디서나 KT 통신망을 그대로 사용합니다. 빠르고 안정적인 네트워크 품질을 경험해보세요.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-2">💰</div>
+        <h3 class="feature-title">합리적인 요금</h3>
+        <p class="feature-desc">불필요한 비용은 없애고 꼭 필요한 데이터만큼만 납부하세요. 매월 통신비를 확실히 줄일 수 있어요.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-3">🕐</div>
+        <h3 class="feature-title">편리한 셀프 개통</h3>
+        <p class="feature-desc">24시간 온라인으로 간편하게 개통 신청이 가능합니다. 매장 방문 없이도 빠르게 개통할 수 있어요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section F: 고객 후기 -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Real Reviews</p>
+      <h2 class="section-title">고객 사용 후기</h2>
+      <p class="section-desc">실제 이용 고객분들의 생생한 후기입니다</p>
+    </div>
+    <div class="review-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <span class="review-plan">데이터 3GB</span>
+        <p class="review-text">요금이 정말 저렴한데 KT망이라 속도도 빠르고 안정적이에요. 주변에 많이 추천하고 있습니다.</p>
+        <div class="review-meta"><span class="review-author">김*진</span><span class="review-date">2026.03.15</span></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <span class="review-plan">데이터 1GB</span>
+        <p class="review-text">가입 절차가 생각보다 훨씬 간단해서 놀랐어요. 온라인으로 15분도 안 걸린 것 같아요.</p>
+        <div class="review-meta"><span class="review-author">박*수</span><span class="review-date">2026.03.08</span></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <span class="review-plan">데이터 10GB</span>
+        <p class="review-text">기존 통신사보다 월 2만원 이상 절약되네요. 통화 품질이나 데이터 속도도 전혀 차이 없어요.</p>
+        <div class="review-meta"><span class="review-author">이*연</span><span class="review-date">2026.03.02</span></div>
+      </div>
+    </div>
+    <div class="section-footer">
+      <a href="/event/review" class="btn btn-ghost btn-md">후기 전체 보기 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Section G: 앱 다운로드 -->
+<section class="app-section">
+  <div class="app-inner">
+    <div class="app-text">
+      <p class="eyebrow">Mobile App</p>
+      <h2>언제 어디서나,<br>앱으로 더 편리하게</h2>
+      <p>요금 조회, 부가서비스 신청, 고객센터까지<br>한번에 해결하세요.</p>
+      <div class="app-btns">
+        <a href="https://play.google.com/store/apps/details?id=kt.co.ktmmobile" target="_blank" class="app-btn">
+          <span class="app-btn-icon">▶</span>
+          <div class="app-btn-text">
+            <div class="store">GET IT ON</div>
+            <div class="name">Google Play</div>
+          </div>
+        </a>
+        <a href="https://apps.apple.com/us/app/kt-m%EB%AA%A8%EB%B0%94%EC%9D%BC/id1094611503" target="_blank" class="app-btn">
+          <span class="app-btn-icon">🍎</span>
+          <div class="app-btn-text">
+            <div class="store">Download on the</div>
+            <div class="name">App Store</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="app-qr">
+      <div class="qr-placeholder">QR코드<br>#에셋미정</div>
+      <p>QR코드로<br>앱 다운로드</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-family">
+    <div class="footer-family-inner">
+      <button class="family-dropdown-btn">패밀리 사이트 바로가기 ▼</button>
+    </div>
+  </div>
+  <div class="footer-links">
+    <div class="footer-links-inner">
+      <a href="/company">회사소개</a>
+      <a href="/policy/privacy" class="bold">개인정보처리방침</a>
+      <a href="/policy/terms">이용약관</a>
+      <a href="/policy/youth">청소년 보호정책</a>
+      <a href="/product/phone/support">공통지원금</a>
+      <a href="#" target="_blank">명의도용방지서비스</a>
+      <a href="#">서비스커버리지</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>
+      <div class="footer-logo"><span class="logo-kt">kt</span><span class="logo-m-mobile">M mobile</span></div>
+      <div class="footer-info">
+        <p>주식회사 OO모바일 | 대표이사 OOO | 서울특별시 OO구 OO로 OOO</p>
+        <p>사업자등록번호 OOO-OO-OOOOO | 통신판매업신고 OOOO-서울OO-OOOOO</p>
+        <p>고객센터 1899-OOOO (무료) | 평일 09~18시 (점심 12~13시 제외)</p>
+      </div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-sns">
+        <button class="sns-btn" title="네이버 카페">N</button>
+        <button class="sns-btn" title="블로그">B</button>
+        <button class="sns-btn" title="인스타그램">📷</button>
+        <button class="sns-btn" title="유튜브">▶</button>
+      </div>
+      <p class="footer-copyright">Copyright © OO Mobile. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll Top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">∧</button>
+
+<script>
+// ===== BANNER SLIDER =====
+let currentSlide = 0;
+const totalSlides = 4;
+let paused = false;
+let timer;
+
+function updateSlider() {
+  document.getElementById('bannerSlides').style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.banner-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === currentSlide);
+  });
+}
+
+function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; updateSlider(); }
+function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; updateSlider(); }
+function goToSlide(n) { currentSlide = n; updateSlider(); }
+
+function startTimer() {
+  clearInterval(timer);
+  if (!paused) timer = setInterval(nextSlide, 3000);
+}
+
+function togglePause() {
+  paused = !paused;
+  document.getElementById('pauseBtn').textContent = paused ? '▶' : '⏸';
+  startTimer();
+}
+
+startTimer();
+
+// ===== TABS =====
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+// ===== SCROLL TOP =====
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTop');
+  btn.classList.toggle('visible', window.scrollY > 300);
+});
+</script>
+</body>
+</html>
