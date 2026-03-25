@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>kt M mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════
+   DESIGN TOKENS (color-system.md)
+═══════════════════════════════ */
+:root {
+  --primary:       #E8001C;
+  --primary-dark:  #B50016;
+  --primary-light: #FFF0F0;
+  --black:  #1A1A1A;
+  --g800:   #333333;
+  --g600:   #666666;
+  --g400:   #999999;
+  --g200:   #CCCCCC;
+  --g100:   #EEEEEE;
+  --g50:    #F5F5F5;
+  --white:  #FFFFFF;
+  --success:#00A854;
+  --warning:#FAAD14;
+  --info:   #1890FF;
+
+  /* layout.md spacing */
+  --sp1:4px; --sp2:8px; --sp3:12px; --sp4:16px;
+  --sp5:20px; --sp6:24px; --sp8:32px; --sp12:48px;
+
+  /* GNB v3 heights */
+  --notice-h: 56px;
+  --logo-h:   56px;
+  --tab-h:    44px;
+  --gnb-h:    100px; /* logo + tab, notice 미노출 기준 */
+
+  --r:8px; --rl:16px; --rpill:50px;
+  --sh1: 0 1px 6px rgba(0,0,0,.07);
+  --sh2: 0 4px 20px rgba(0,0,0,.10);
+  --sh3: 0 8px 32px rgba(0,0,0,.14);
+}
+
+/* ═══════════════════════════════
+   RESET & BASE
+═══════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  background:var(--g50);
+  color:var(--g800);
+  max-width:430px;
+  margin:0 auto;
+  overflow-x:hidden;
+  position:relative;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+/* ═══════════════════════════════
+   GNB v3 — 공지 배너 (layout.md)
+═══════════════════════════════ */
+.notice-banner {
+  height: var(--notice-h);
+  background: #FFDC3C;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp4);
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.notice-banner.hidden { display:none; }
+.notice-illust {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; flex-shrink: 0;
+}
+.notice-text {
+  flex: 1;
+  font-size: 14px;
+  color: var(--black);
+  line-height: 1.4;
+}
+.notice-text strong { font-weight: 700; }
+.notice-close {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--g600); flex-shrink: 0;
+  border-radius: 50%;
+  transition: background .15s;
+}
+.notice-close:active { background: rgba(0,0,0,.08); }
+.notice-close svg { width: 18px; height: 18px; }
+
+/* ═══════════════════════════════
+   GNB v3 — 로고 바 (GNB.md 영역2)
+═══════════════════════════════ */
+.logo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--logo-h);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp4);
+  /* 공지 배너가 올라가면 자동으로 top:0 에 고정 */
+}
+.logo-wrap {
+  display: flex; align-items: center; gap: 2px;
+  text-decoration: none;
+}
+.logo-kt {
+  font-size: 13px; font-weight: 900;
+  color: var(--black); letter-spacing: -0.5px;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.logo-m {
+  font-size: 18px; font-weight: 900;
+  color: var(--primary); letter-spacing: -0.5px;
+  margin-left: 3px;
+}
+.logo-mobile {
+  font-size: 15px; font-weight: 700;
+  color: var(--black); letter-spacing: -0.3px;
+}
+.gnb-actions { display: flex; gap: 0; }
+.gnb-btn {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--black); border-radius: 50%;
+  transition: background .15s; position: relative;
+}
+.gnb-btn:active { background: var(--g50); }
+.gnb-btn svg { width: 22px; height: 22px; }
+.gnb-btn .badge-dot {
+  position: absolute; top: 9px; right: 9px;
+  width: 7px; height: 7px;
+  background: var(--primary); border-radius: 50%;
+  border: 1.5px solid var(--white);
+}
+
+/* ═══════════════════════════════
+   GNB v3 — 1depth 탭 메뉴 (GNB.md 영역3)
+═══════════════════════════════ */
+.gnb-tabs {
+  position: sticky;
+  top: var(--logo-h);
+  z-index: 99;
+  height: var(--tab-h);
+  background: var(--white);
+  border-bottom: 1px solid var(--g100);
+  display: flex;
+  align-items: stretch;
+  padding: 0 var(--sp4);
+  gap: 0;
+  box-shadow: 0 1px 0 var(--g100);
+}
+.gnb-tab {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 500; color: var(--g600);
+  position: relative; cursor: pointer;
+  transition: color .15s;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  white-space: nowrap;
+}
+.gnb-tab.active {
+  color: var(--black); font-weight: 700;
+  border-bottom-color: var(--primary);
+}
+.gnb-tab:active { opacity: .7; }
+
+/* ═══════════════════════════════
+   메인 콘텐츠
+═══════════════════════════════ */
+.page-body {
+  /* layout.md: padding-top = logo(56) + tab(44) = 100px — sticky가 처리하므로 여기선 0 */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ═══════════════════════════════
+   섹션 A — 메인 배너 슬라이더
+═══════════════════════════════ */
+.banner-wrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--black);
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+.banner-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
+}
+.banner-slide {
+  min-width: 100%; width: 100%; height: 100%;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--sp6) var(--sp5);
+  flex-shrink: 0;
+}
+.banner-slide::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(170deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,.75) 100%);
+}
+/* 배너 이미지 스타일 */
+.banner-slide-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.bs1 { background: linear-gradient(140deg,#FF4461 0%,#C1001A 60%,#6b0010 100%); }
+.bs2 { background: linear-gradient(140deg,#1e3a8a 0%,#1e40af 60%,#0f1f5c 100%); }
+.bs3 { background: linear-gradient(140deg,#064e3b 0%,#047857 60%,#059669 100%); }
+.bs4 { background: linear-gradient(140deg,#4c1d95 0%,#6d28d9 60%,#5b21b6 100%); }
+
+/* 장식 원 */
+.bd1 { position:absolute; right:-40px; top:-40px; width:220px; height:220px; border-radius:50%; border:44px solid rgba(255,255,255,.07); }
+.bd2 { position:absolute; right:60px; top:30px; width:110px; height:110px; border-radius:50%; border:22px solid rgba(255,255,255,.05); }
+
+.banner-content { position: relative; z-index: 1; }
+.banner-eyebrow {
+  display: inline-block;
+  background: rgba(255,255,255,.2);
+  backdrop-filter: blur(8px);
+  color: #fff; font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: var(--rpill);
+  margin-bottom: 8px; letter-spacing: .3px;
+}
+.banner-title {
+  font-size: 22px; font-weight: 900;
+  color: #fff; line-height: 1.25;
+  margin-bottom: 5px;
+}
+.banner-desc {
+  font-size: 13px; color: rgba(255,255,255,.78);
+  margin-bottom: 16px; line-height: 1.5;
+}
+.banner-cta {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #fff; color: var(--primary);
+  font-size: 13px; font-weight: 700;
+  padding: 10px 18px; border-radius: var(--rpill);
+  box-shadow: 0 2px 12px rgba(0,0,0,.2);
+  transition: transform .15s, box-shadow .15s;
+}
+.banner-cta:active { transform: scale(.96); box-shadow: none; }
+.banner-cta svg { width: 13px; height: 13px; }
+
+/* 인디케이터 */
+.banner-nav {
+  position: absolute; bottom: 14px; right: 14px;
+  display: flex; align-items: center; gap: 6px;
+  z-index: 2;
+}
+.bn-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.4);
+  cursor: pointer; transition: all .22s;
+}
+.bn-dot.on { background: #fff; width: 18px; border-radius: 3px; }
+
+/* 슬라이드 카운터 + 일시정지 */
+.banner-ctrl {
+  position: absolute; bottom: 12px; left: 14px;
+  display: flex; align-items: center; gap: 6px;
+  z-index: 2;
+}
+.bn-count {
+  background: rgba(0,0,0,.35); color: #fff;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: var(--rpill);
+  letter-spacing: .5px;
+}
+.bn-pause {
+  width: 26px; height: 26px;
+  background: rgba(0,0,0,.35); color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.bn-pause svg { width: 12px; height: 12px; }
+
+/* ═══════════════════════════════
+   섹션 B — 빠른 가입 바
+═══════════════════════════════ */
+.quick-bar {
+  background: var(--white);
+  padding: var(--sp4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  border-bottom: 8px solid var(--g50);
+}
+.qi {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 14px;
+  background: var(--g50); border-radius: var(--r);
+  border: 1.5px solid transparent;
+  transition: all .15s; cursor: pointer;
+}
+.qi:active { background: var(--primary-light); border-color: var(--primary); }
+.qi-ico {
+  width: 36px; height: 36px; border-radius: var(--r);
+  background: var(--primary-light);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.qi-ico svg { width: 18px; height: 18px; color: var(--primary); }
+.qi-label { font-size: 12px; font-weight: 700; color: var(--black); }
+.qi-sub   { font-size: 10px; color: var(--g400); margin-top: 1px; }
+
+/* ═══════════════════════════════
+   공통 섹션 구조
+═══════════════════════════════ */
+.sec {
+  background: var(--white);
+  padding: 22px 0 6px;
+}
+.sec + .sec { border-top: 8px solid var(--g50); }
+
+.sec-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 var(--sp4); margin-bottom: 14px;
+}
+.sec-title { font-size: 17px; font-weight: 700; color: var(--black); }
+.sec-sub   { font-size: 11px; color: var(--g600); margin-top: 3px; }
+.sec-more  {
+  font-size: 12px; color: var(--g600); font-weight: 500;
+  display: flex; align-items: center; gap: 2px;
+  white-space: nowrap; padding: 0;
+}
+.sec-more svg { width: 13px; height: 13px; }
+.sec-more:active { opacity: .6; }
+
+.hscroll {
+  overflow-x: auto; padding: 0 var(--sp4) 16px;
+  display: flex; gap: 10px;
+  scrollbar-width: none;
+}
+.hscroll::-webkit-scrollbar { display: none; }
+
+/* ═══════════════════════════════
+   섹션 C — 요금제 카드
+═══════════════════════════════ */
+.rate-tabs {
+  display: flex; gap: 7px;
+  padding: 0 var(--sp4); margin-bottom: 14px;
+}
+.rtab {
+  height: 32px; padding: 0 14px;
+  border-radius: var(--rpill);
+  font-size: 12px; font-weight: 600;
+  background: var(--g50); color: var(--g600);
+  border: 1.5px solid var(--g100);
+  transition: all .18s;
+}
+.rtab.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+.rtab:active { opacity: .8; }
+
+.rate-card {
+  min-width: 172px; max-width: 172px;
+  background: var(--white);
+  border: 1.5px solid var(--g100);
+  border-radius: var(--rl);
+  padding: 18px 16px;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: var(--sh1);
+}
+.rate-card:active { transform: scale(.97); box-shadow: var(--sh2); }
+.rate-card.pop { border-color: var(--primary); background: linear-gradient(155deg,#fff 55%,var(--primary-light)); }
+
+.rc-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: var(--rpill);
+  margin-bottom: 10px;
+}
+.rb-red   { background: var(--primary); color: #fff; }
+.rb-blue  { background: var(--info);    color: #fff; }
+.rb-green { background: var(--success); color: #fff; }
+
+.rc-data {
+  font-size: 34px; font-weight: 900;
+  color: var(--black); line-height: 1; letter-spacing: -1px;
+  margin-bottom: 2px;
+}
+.rc-data span { font-size: 15px; font-weight: 500; color: var(--g600); margin-left: 1px; }
+.rc-meta {
+  font-size: 10px; color: var(--g600);
+  line-height: 1.7; margin-bottom: 12px;
+}
+.rc-price {
+  font-size: 20px; font-weight: 900; color: var(--primary);
+  letter-spacing: -.5px; margin-bottom: 10px;
+}
+.rc-price span { font-size: 11px; font-weight: 400; color: var(--g600); letter-spacing: 0; }
+.rc-btn {
+  width: 100%; height: 36px;
+  background: var(--primary); color: #fff;
+  border-radius: var(--r);
+  font-size: 12px; font-weight: 700;
+  transition: background .15s;
+}
+.rate-card.pop .rc-btn { background: var(--primary-dark); }
+.rc-btn:active { background: var(--primary-dark); }
+
+/* ═══════════════════════════════
+   섹션 D — 이벤트 카드
+═══════════════════════════════ */
+.ev-card {
+  min-width: 236px; border-radius: var(--rl);
+  overflow: hidden; cursor: pointer;
+  box-shadow: var(--sh1); background: var(--white);
+  border: 1px solid var(--g100);
+  transition: transform .15s;
+}
+.ev-card:active { transform: scale(.97); }
+.ev-thumb {
+  height: 108px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.ev-thumb .ev-bg-text {
+  position: absolute;
+  font-size: 80px; font-weight: 900;
+  opacity: .12; color: #fff; letter-spacing: -4px;
+  white-space: nowrap; user-select: none;
+}
+.et1 { background: linear-gradient(135deg, #E8001C, #ff6b6b); }
+.et2 { background: linear-gradient(135deg, #2563EB, #60a5fa); }
+.et3 { background: linear-gradient(135deg, #d97706, #fbbf24); }
+.ev-emoji { font-size: 38px; position: relative; z-index: 1; }
+.ev-status {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: var(--rpill);
+  z-index: 2;
+}
+.es-live { background: var(--success); color: #fff; }
+.es-soon { background: var(--info); color: #fff; }
+.ev-body { padding: 12px 14px 14px; }
+.ev-title { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 4px; line-height: 1.4; }
+.ev-period { font-size: 11px; color: var(--g400); }
+
+/* ═══════════════════════════════
+   섹션 E — 서비스 특징
+═══════════════════════════════ */
+.features-grid {
+  padding: 6px 14px 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.feat {
+  background: var(--g50); border-radius: var(--rl);
+  padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 9px;
+  cursor: pointer; transition: all .15s;
+}
+.feat:active { background: var(--primary-light); }
+.feat.wide {
+  grid-column: 1 / -1;
+  flex-direction: row; align-items: center; gap: 14px;
+  background: linear-gradient(135deg, var(--primary-light), #ffe4e8);
+  border: 1.5px solid rgba(232,0,28,.14);
+}
+.feat-ico {
+  width: 44px; height: 44px; flex-shrink: 0;
+  border-radius: 12px; background: var(--white);
+  box-shadow: var(--sh1);
+  display: flex; align-items: center; justify-content: center;
+}
+.feat-ico svg { width: 22px; height: 22px; color: var(--primary); }
+.feat-title { font-size: 13px; font-weight: 700; color: var(--black); }
+.feat-desc  { font-size: 11px; color: var(--g600); line-height: 1.55; }
+
+/* ═══════════════════════════════
+   섹션 F — 후기
+═══════════════════════════════ */
+.rv-card {
+  min-width: 216px;
+  background: var(--white); border: 1.5px solid var(--g100);
+  border-radius: var(--rl); padding: 18px;
+  box-shadow: var(--sh1);
+}
+.rv-stars { color: var(--warning); font-size: 13px; margin-bottom: 8px; letter-spacing: 1px; }
+.rv-plan  {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  color: var(--primary); background: var(--primary-light);
+  padding: 2px 8px; border-radius: var(--rpill); margin-bottom: 8px;
+}
+.rv-text   { font-size: 12px; color: var(--g800); line-height: 1.65; margin-bottom: 10px; }
+.rv-author { font-size: 11px; color: var(--g400); }
+
+/* ═══════════════════════════════
+   섹션 G — 앱 다운로드
+═══════════════════════════════ */
+.app-sec { background: var(--g50); padding: 0 var(--sp4) 28px; }
+.app-banner {
+  background: var(--black); border-radius: var(--rl);
+  padding: 22px 20px; position: relative; overflow: hidden;
+}
+.app-deco1 { position:absolute; right:-30px; top:-30px; width:130px; height:130px; border-radius:50%; border:28px solid rgba(255,255,255,.05); }
+.app-deco2 { position:absolute; right:40px; top:40px; width:70px; height:70px; border-radius:50%; border:14px solid rgba(255,255,255,.04); }
+.app-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; position:relative;z-index:1; }
+.app-desc  { font-size: 12px; color: rgba(255,255,255,.6); line-height: 1.6; margin-bottom: 18px; position:relative;z-index:1; }
+.app-btns  { display: flex; gap: 8px; flex-wrap: wrap; position:relative;z-index:1; }
+.app-btn   {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.2); border-radius: var(--r);
+  padding: 9px 14px; font-size: 12px; font-weight: 600;
+  transition: background .15s;
+}
+.app-btn:active { background: rgba(255,255,255,.22); }
+.app-btn svg { width: 17px; height: 17px; }
+
+/* ═══════════════════════════════
+   햄버거 사이드 메뉴 오버레이
+   GNB.md 영역4 — 좌우 2단 분할
+═══════════════════════════════ */
+.side-overlay {
+  position: fixed; inset: 0;
+  z-index: 300;
+  display: none;
+  max-width: 430px; margin: 0 auto;
+}
+.side-overlay.open { display: flex; flex-direction: column; }
+
+/* 상단 바 */
+.side-topbar {
+  height: var(--logo-h);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--sp4);
+  border-bottom: 1px solid var(--g100);
+  flex-shrink: 0;
+}
+.side-topbar-left { display: flex; align-items: center; gap: 4px; }
+.side-home-btn {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--black); border-radius: 50%;
+}
+.side-home-btn:active { background: var(--g50); }
+.side-home-btn svg { width: 22px; height: 22px; }
+.side-topbar-right { display: flex; }
+
+/* 사용자 인사 + 바로가기 */
+.side-user-area {
+  background: var(--white);
+  padding: 14px var(--sp4) 16px;
+  border-bottom: 8px solid var(--g50);
+  flex-shrink: 0;
+}
+.side-greeting {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 15px; color: var(--black);
+  margin-bottom: 16px; cursor: pointer;
+}
+.side-greeting strong { font-weight: 700; }
+.side-greeting svg { width: 16px; height: 16px; color: var(--g400); }
+
+.side-shortcuts {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.ssc {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 12px 4px;
+  background: var(--g50); border-radius: var(--r);
+  cursor: pointer; transition: background .15s;
+}
+.ssc:active { background: var(--primary-light); }
+.ssc-ico {
+  width: 40px; height: 40px;
+  border-radius: 12px; background: var(--white);
+  box-shadow: var(--sh1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.ssc-label { font-size: 10px; font-weight: 600; color: var(--g800); text-align: center; line-height: 1.3; }
+
+/* 2단 메뉴 */
+.side-menus {
+  flex: 1; display: flex; overflow: hidden;
+  background: var(--g50);
+}
+
+/* 좌측 1depth */
+.side-lnb {
+  width: 35%; background: var(--white);
+  overflow-y: auto;
+  border-right: 1px solid var(--g100);
+  flex-shrink: 0;
+}
+.lnb-item {
+  display: flex; align-items: center;
+  height: 52px; padding: 0 16px;
+  font-size: 15px; color: var(--g800);
+  cursor: pointer; transition: all .12s;
+  border-left: 3px solid transparent;
+}
+.lnb-item.active {
+  background: var(--black); color: var(--white);
+  font-weight: 700; border-left-color: var(--primary);
+}
+.lnb-item:not(.active):active { background: var(--g50); }
+
+/* 우측 2depth */
+.side-rnb {
+  flex: 1; overflow-y: auto;
+  padding: 6px 0 24px;
+}
+.rnb-group-label {
+  font-size: 10px; font-weight: 700; color: var(--g400);
+  padding: 12px 16px 4px; letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.rnb-item {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 46px; padding: 0 16px;
+  font-size: 14px; color: var(--g800);
+  cursor: pointer; transition: background .12s;
+}
+.rnb-item:active { background: rgba(0,0,0,.04); }
+.rnb-item svg { width: 14px; height: 14px; color: var(--g400); }
+.rnb-item.sub {
+  height: 40px; padding-left: 24px;
+  font-size: 13px; color: var(--g600);
+  background: rgba(0,0,0,.02);
+}
+.rnb-item.sub:active { background: rgba(0,0,0,.06); }
+.rnb-divider { height: 1px; background: var(--g100); margin: 4px 0; }
+
+/* ═══════════════════════════════
+   토스트
+═══════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  left: 50%; transform: translateX(-50%) translateY(16px);
+  background: rgba(26,26,26,.9); color: #fff;
+  padding: 10px 20px; border-radius: var(--rpill);
+  font-size: 13px; opacity: 0;
+  transition: all .22s; pointer-events: none;
+  z-index: 400; white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════
+   페이지 입장 애니메이션
+═══════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.anim { animation: fadeUp .4s ease both; }
+.d1{animation-delay:.05s} .d2{animation-delay:.12s}
+.d3{animation-delay:.18s} .d4{animation-delay:.24s}
+.d5{animation-delay:.30s} .d6{animation-delay:.36s}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════
+  GNB v3 영역1: 공지 배너
+════════════════════════════ -->
+<div class="notice-banner" id="noticeBanner">
+  <div class="notice-illust">👨‍👩‍👧</div>
+  <div class="notice-text">지금 가족과 함께 가입하면 <strong>5만원 증정!</strong></div>
+  <button class="notice-close" onclick="closeNotice()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
+
+<!-- ════════════════════════════
+  GNB v3 영역2: 로고 바
+════════════════════════════ -->
+<div class="logo-bar">
+  <a class="logo-wrap" href="#" onclick="return false">
+    <span class="logo-kt">kt</span>
+    <span class="logo-m">M</span>
+    <span class="logo-mobile">mobile</span>
+  </a>
+  <div class="gnb-actions">
+    <button class="gnb-btn" onclick="toast('검색')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="gnb-btn" onclick="toast('마이페이지')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+    <button class="gnb-btn" id="hamburgerBtn" onclick="openSide()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+  GNB v3 영역3: 1depth 탭 메뉴
+════════════════════════════ -->
+<div class="gnb-tabs">
+  <button class="gnb-tab active" onclick="setTab(this, '가입하기')">가입하기</button>
+  <button class="gnb-tab" onclick="setTab(this, '상품')">상품</button>
+  <button class="gnb-tab" onclick="setTab(this, '혜택')">혜택</button>
+  <button class="gnb-tab" onclick="setTab(this, '결합')">결합</button>
+  <button class="gnb-tab" onclick="setTab(this, '고객센터')">고객센터</button>
+</div>
+
+<!-- ════════════════════════════
+  메인 콘텐츠
+════════════════════════════ -->
+<main class="page-body">
+
+  <!-- 섹션 A: 메인 배너 -->
+  <div class="banner-wrap anim d1">
+    <div class="banner-track" id="bannerTrack">
+
+      <!-- 배너 1: KT 인터넷 결합 특가 (레드 무드) -->
+      <div class="banner-slide bs1">
+        <img class="banner-slide-img"
+          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=860&q=80&auto=format&fit=crop"
+          alt="KT 인터넷 결합 특가"
+          loading="eager"
+        />
+        <div class="bd1"></div><div class="bd2"></div>
+        <div class="banner-content">
+          <div class="banner-eyebrow">🔥 KT 인터넷 결합 특가</div>
+          <div class="banner-title">KT 인터넷 + M모바일<br>월 <em style="color:#FFD966;font-style:normal;">1만원 이하</em>로!</div>
+          <div class="banner-desc">KT 인터넷과 함께 쓰면 통신비가 확 줄어요</div>
+          <button class="banner-cta" onclick="toast('트리플할인 신청')">트리플할인 신청하기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+
+      <!-- 배너 2: 소상공인 사장이지 요금제 (블루 무드) -->
+      <div class="banner-slide bs2">
+        <img class="banner-slide-img"
+          src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=860&q=80&auto=format&fit=crop"
+          alt="소상공인 전용 요금제 사장이지"
+          loading="lazy"
+        />
+        <div class="bd1"></div><div class="bd2"></div>
+        <div class="banner-content">
+          <div class="banner-eyebrow">🏪 소상공인 전용 요금제</div>
+          <div class="banner-title">사장님도 알뜰하게,<br><em style="color:#93C5FD;font-style:normal;">사장이지</em></div>
+          <div class="banner-desc">매장 운영에 꼭 필요한 통신 서비스를 합리적으로</div>
+          <button class="banner-cta" onclick="toast('사장이지 요금제')">요금제 확인 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+
+      <!-- 배너 3: 캐치콜 플러스 (그린 무드) -->
+      <div class="banner-slide bs3">
+        <img class="banner-slide-img"
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=860&q=80&auto=format&fit=crop"
+          alt="캐치콜 플러스 부가서비스"
+          loading="lazy"
+        />
+        <div class="bd1"></div><div class="bd2"></div>
+        <div class="banner-content">
+          <div class="banner-eyebrow">📞 부가서비스 — 캐치콜 플러스</div>
+          <div class="banner-title">놓친 전화도 이제는<br><em style="color:#6EE7B7;font-style:normal;">놓치지</em> 않게</div>
+          <div class="banner-desc">통화 중이거나 수신 불가 상태일 때도 연결을 도와드려요</div>
+          <button class="banner-cta" onclick="toast('캐치콜 플러스')">서비스 알아보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+
+      <!-- 배너 4: 데이터쉐어링 (퍼플 무드) -->
+      <div class="banner-slide bs4">
+        <img class="banner-slide-img"
+          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=860&q=80&auto=format&fit=crop"
+          alt="데이터쉐어링 서비스"
+          loading="lazy"
+        />
+        <div class="bd1"></div><div class="bd2"></div>
+        <div class="banner-content">
+          <div class="banner-eyebrow">📲 무제한 요금제 고객 무료</div>
+          <div class="banner-title">태블릿·워치도 함께,<br><em style="color:#C4B5FD;font-style:normal;">데이터쉐어링</em></div>
+          <div class="banner-desc">하나의 요금제로 여러 기기를 연결하세요. 무제한 고객은 무료!</div>
+          <button class="banner-cta" onclick="toast('데이터쉐어링 신청')">신청하기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="banner-ctrl">
+      <div class="bn-count" id="bnCount">1 / 4</div>
+      <button class="bn-pause" id="bnPauseBtn" onclick="togglePause()">
+        <svg id="bnPauseIco" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+    </div>
+    <div class="banner-nav" id="bannerNav">
+      <div class="bn-dot on"  onclick="goSlide(0)"></div>
+      <div class="bn-dot"     onclick="goSlide(1)"></div>
+      <div class="bn-dot"     onclick="goSlide(2)"></div>
+      <div class="bn-dot"     onclick="goSlide(3)"></div>
+    </div>
+  </div>
+
+  <!-- 섹션 B: 빠른 가입 바 -->
+  <div class="quick-bar anim d2">
+    <div class="qi" onclick="toast('유심 없이 가입')">
+      <div class="qi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      <div><div class="qi-label">유심 없이 가입</div><div class="qi-sub">유심+요금제 동시</div></div>
+    </div>
+    <div class="qi" onclick="toast('유심 있이 가입')">
+      <div class="qi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div><div class="qi-label">유심 있이 가입</div><div class="qi-sub">요금제만 신청</div></div>
+    </div>
+    <div class="qi" onclick="toast('eSIM 가입')">
+      <div class="qi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+      <div><div class="qi-label">eSIM 가입</div><div class="qi-sub">실물 유심 불필요</div></div>
+    </div>
+    <div class="qi" onclick="toast('요금제 전체 보기')">
+      <div class="qi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+      <div><div class="qi-label">요금제 보기</div><div class="qi-sub">전체 비교</div></div>
+    </div>
+  </div>
+
+  <!-- 섹션 C: 추천 요금제 -->
+  <section class="sec anim d3">
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">이달의 추천 요금제</div>
+        <div class="sec-sub">나에게 딱 맞는 요금제 찾기</div>
+      </div>
+      <button class="sec-more" onclick="toast('요금제 전체')">전체보기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+    <div class="rate-tabs">
+      <button class="rtab on">유심 요금제</button>
+      <button class="rtab" onclick="toast('휴대폰 요금제')">휴대폰 요금제</button>
+    </div>
+    <div class="hscroll">
+      <div class="rate-card pop">
+        <div class="rc-badge rb-red">🔥 인기</div>
+        <div class="rc-data">3<span>GB</span></div>
+        <div class="rc-meta">통화 무제한 · 문자 무제한<br>소진 후 400Kbps 무제한</div>
+        <div class="rc-price">12,900<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('데이터 3GB 가입')">가입하기</button>
+      </div>
+      <div class="rate-card">
+        <div class="rc-badge rb-blue">✨ NEW</div>
+        <div class="rc-data">10<span>GB</span></div>
+        <div class="rc-meta">통화 무제한 · 문자 무제한<br>소진 후 1Mbps 무제한</div>
+        <div class="rc-price">19,800<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('데이터 10GB 가입')">가입하기</button>
+      </div>
+      <div class="rate-card">
+        <div class="rc-badge rb-green">👍 추천</div>
+        <div class="rc-data">1<span>GB</span></div>
+        <div class="rc-meta">통화 100분 · 문자 무제한<br>소진 후 200Kbps 무제한</div>
+        <div class="rc-price">9,900<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('데이터 1GB 가입')">가입하기</button>
+      </div>
+      <div class="rate-card">
+        <div class="rc-badge rb-red">🚀 인기</div>
+        <div class="rc-data" style="font-size:30px">무제한</div>
+        <div class="rc-meta">통화 무제한 · 문자 무제한<br>완전 무제한 데이터</div>
+        <div class="rc-price">29,900<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('무제한 요금제 가입')">가입하기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 D: HOT 이벤트 -->
+  <section class="sec anim d4">
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">HOT 이벤트 🔥</div>
+        <div class="sec-sub">지금 놓치면 아쉬운 혜택</div>
+      </div>
+      <button class="sec-more" onclick="toast('이벤트 전체')">전체보기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+    <div class="hscroll">
+      <div class="ev-card" onclick="toast('신규가입 특별혜택 이벤트')">
+        <div class="ev-thumb et1"><div class="ev-bg-text">EVENT</div><div class="ev-emoji">🎁</div><div class="ev-status es-live">진행중</div></div>
+        <div class="ev-body"><div class="ev-title">신규가입 특별 혜택 이벤트</div><div class="ev-period">2026.03.01 ~ 03.31</div></div>
+      </div>
+      <div class="ev-card" onclick="toast('친구 초대 이벤트')">
+        <div class="ev-thumb et2"><div class="ev-bg-text">INVITE</div><div class="ev-emoji">👥</div><div class="ev-status es-live">진행중</div></div>
+        <div class="ev-body"><div class="ev-title">친구 초대하고 데이터 받자</div><div class="ev-period">2026.03.01 ~ 03.31</div></div>
+      </div>
+      <div class="ev-card" onclick="toast('리뷰 작성 이벤트')">
+        <div class="ev-thumb et3"><div class="ev-bg-text">REVIEW</div><div class="ev-emoji">✍️</div><div class="ev-status es-soon">예정</div></div>
+        <div class="ev-body"><div class="ev-title">후기 남기고 상품권 받기</div><div class="ev-period">2026.04.01 ~ 04.30</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 E: 서비스 특징 -->
+  <section class="sec anim d5" style="padding-bottom:6px;">
+    <div class="sec-head" style="margin-bottom:6px"><div class="sec-title">왜 kt M모바일인가요?</div></div>
+    <div class="features-grid">
+      <div class="feat wide" onclick="toast('KT망 안내')">
+        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div><div class="feat-title">KT망 그대로, 더 저렴하게</div><div class="feat-desc">동일한 KT 통신망을 사용하면서 합리적인 가격으로 이용하세요.</div></div>
+      </div>
+      <div class="feat" onclick="toast('24시간 개통')">
+        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="feat-title">24시간 셀프 개통</div>
+        <div class="feat-desc">온라인으로 언제든 간편하게</div>
+      </div>
+      <div class="feat" onclick="toast('약정 없음')">
+        <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="feat-title">약정 없음</div>
+        <div class="feat-desc">부담 없이 자유롭게 변경</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 F: 고객 후기 -->
+  <section class="sec anim d6">
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">고객 사용 후기</div>
+        <div class="sec-sub">실제 이용 고객의 생생한 후기</div>
+      </div>
+      <button class="sec-more" onclick="toast('전체 후기')">전체보기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+    <div class="hscroll">
+      <div class="rv-card">
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-plan">데이터 3GB</div>
+        <div class="rv-text">가격 대비 너무 만족스러워요. 통화도 잘 되고 데이터도 충분해서 매달 잘 쓰고 있습니다!</div>
+        <div class="rv-author">김*진 · 2026.03.10</div>
+      </div>
+      <div class="rv-card">
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-plan">데이터 1GB</div>
+        <div class="rv-text">와이파이 주로 쓰는데 월 9,900원이면 완전 가성비. 개통도 정말 쉬웠어요.</div>
+        <div class="rv-author">이*수 · 2026.03.08</div>
+      </div>
+      <div class="rv-card">
+        <div class="rv-stars">★★★★☆</div>
+        <div class="rv-plan">무제한 요금제</div>
+        <div class="rv-text">타사 대비 훨씬 저렴한데 KT망이라 속도도 동일하게 빠릅니다. 강력 추천해요!</div>
+        <div class="rv-author">박*민 · 2026.03.05</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 G: 앱 다운로드 -->
+  <div class="sec app-sec" style="padding-top:20px; border-top:8px solid var(--g50);">
+    <div class="app-banner">
+      <div class="app-deco1"></div><div class="app-deco2"></div>
+      <div class="app-title">언제 어디서나, 앱으로 더 편리하게</div>
+      <div class="app-desc">요금 조회, 부가서비스 신청,<br>고객센터까지 한번에</div>
+      <div class="app-btns">
+        <button class="app-btn" onclick="toast('Google Play 이동')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.8.9-1.3 1.6-.9l14 8.5c.7.4.7 1.4 0 1.8l-14 8.5c-.7.4-1.6-.1-1.6-.9z"/></svg>
+          Google Play
+        </button>
+        <button class="app-btn" onclick="toast('App Store 이동')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ════════════════════════════
+  GNB v3 영역4: 햄버거 사이드 메뉴
+════════════════════════════ -->
+<div class="side-overlay" id="sideOverlay">
+
+  <!-- 상단 바 -->
+  <div class="side-topbar">
+    <div class="side-topbar-left">
+      <button class="side-home-btn" onclick="closeSide()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+    </div>
+    <div class="side-topbar-right">
+      <button class="gnb-btn" onclick="toast('로그아웃')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+      <button class="gnb-btn" onclick="toast('설정')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button class="gnb-btn" onclick="closeSide()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 사용자 인사 + 바로가기 -->
+  <div class="side-user-area">
+    <div class="side-greeting" onclick="toast('마이페이지')">
+      안녕하세요, <strong>최*예님</strong>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="side-shortcuts">
+      <div class="ssc" onclick="toast('요금제 조회')">
+        <div class="ssc-ico">💳</div>
+        <div class="ssc-label">요금제</div>
+      </div>
+      <div class="ssc" onclick="toast('신청조회')">
+        <div class="ssc-ico">🔍</div>
+        <div class="ssc-label">신청조회</div>
+      </div>
+      <div class="ssc" onclick="toast('자주묻는질문')">
+        <div class="ssc-ico">💬</div>
+        <div class="ssc-label">자주묻는<br>질문</div>
+      </div>
+      <div class="ssc" onclick="toast('교체 유심 신청')">
+        <div class="ssc-ico">🔄</div>
+        <div class="ssc-label">교체유심<br>신청</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단 메뉴 -->
+  <div class="side-menus">
+
+    <!-- 좌측 1depth -->
+    <div class="side-lnb" id="sideLnb">
+      <div class="lnb-item active" data-menu="가입하기" onclick="selectLnb(this)">가입하기</div>
+      <div class="lnb-item" data-menu="상품"    onclick="selectLnb(this)">상품</div>
+      <div class="lnb-item" data-menu="혜택"    onclick="selectLnb(this)">혜택</div>
+      <div class="lnb-item" data-menu="결합"    onclick="selectLnb(this)">결합</div>
+      <div class="lnb-item" data-menu="고객센터" onclick="selectLnb(this)">고객센터</div>
+      <div class="lnb-item" data-menu="마이페이지" onclick="selectLnb(this)">마이페이지</div>
+    </div>
+
+    <!-- 우측 2depth -->
+    <div class="side-rnb" id="sideRnb"></div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastEl"></div>
+
+<script>
+/* ══════════════════════
+   배너 슬라이더
+══════════════════════ */
+let cur = 0, total = 4, paused = false, timer;
+
+function goSlide(n) {
+  cur = n;
+  document.getElementById('bannerTrack').style.transform = `translateX(-${n * 100}%)`;
+  document.querySelectorAll('.bn-dot').forEach((d, i) => d.classList.toggle('on', i === n));
+  document.getElementById('bnCount').textContent = `${n + 1} / ${total}`;
+}
+function nextSlide() { goSlide((cur + 1) % total); }
+function startTimer() { timer = setInterval(nextSlide, 3500); }
+function togglePause() {
+  paused = !paused;
+  if (paused) {
+    clearInterval(timer);
+    document.getElementById('bnPauseIco').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+  } else {
+    startTimer();
+    document.getElementById('bnPauseIco').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  }
+}
+startTimer();
+
+/* ══════════════════════
+   공지 배너 닫기
+══════════════════════ */
+function closeNotice() {
+  document.getElementById('noticeBanner').classList.add('hidden');
+}
+
+/* ══════════════════════
+   GNB 1depth 탭
+══════════════════════ */
+function setTab(el, name) {
+  document.querySelectorAll('.gnb-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  toast(name + ' 페이지로 이동');
+}
+
+/* ══════════════════════
+   사이드 메뉴 데이터
+══════════════════════ */
+const MENUS = {
+  '가입하기': [
+    { type: 'group', label: 'USIM' },
+    { type: 'sub', label: '유심 없이 가입' },
+    { type: 'sub', label: '유심 있이 가입' },
+    { type: 'group', label: '유심 타입' },
+    { type: 'sub', label: 'eSIM 가입' },
+    { type: 'sub', label: '워치 개통' },
+    { type: 'group', label: '유심 구매' },
+    { type: 'sub', label: '다이렉트몰' },
+    { type: 'sub', label: '오픈마켓' },
+    { type: 'sub', label: '편의점·마트' },
+  ],
+  '상품': [
+    { type: 'group', label: '요금제' },
+    { type: 'sub', label: '요금제 목록' },
+    { type: 'sub', label: '요금제 비교' },
+    { type: 'group', label: '부가서비스' },
+    { type: 'sub', label: '전체 부가서비스' },
+    { type: 'sub', label: '해외 로밍' },
+    { type: 'group', label: '추가서비스' },
+    { type: 'sub', label: '함께쓰기' },
+    { type: 'sub', label: '데이터쉐어링' },
+    { type: 'sub', label: '휴대폰안심보험' },
+    { type: 'sub', label: '새 휴대폰' },
+  ],
+  '혜택': [
+    { type: 'group', label: '이벤트' },
+    { type: 'sub', label: '이번달 이벤트' },
+    { type: 'sub', label: '당첨자 확인' },
+    { type: 'group', label: '참여 혜택' },
+    { type: 'sub', label: '친구 초대' },
+    { type: 'sub', label: '가입 리뷰 작성' },
+  ],
+  '결합': [
+    { type: 'item', label: '아무나 SOLO 결합' },
+    { type: 'item', label: '아무나 가족 결합+' },
+    { type: 'item', label: 'KT인터넷 트리플할인' },
+  ],
+  '고객센터': [
+    { type: 'group', label: '이용·공지' },
+    { type: 'sub', label: '공지사항' },
+    { type: 'sub', label: '고객센터 안내' },
+    { type: 'sub', label: '개통 가이드' },
+    { type: 'sub', label: '단말기 AS 안내' },
+    { type: 'group', label: 'FAQ·고객문의' },
+    { type: 'sub', label: '상담 예약' },
+    { type: 'sub', label: '1:1 상담문의' },
+    { type: 'sub', label: '자주 묻는 질문' },
+    { type: 'group', label: '셀프서비스' },
+    { type: 'sub', label: '서비스 조회·변경' },
+    { type: 'sub', label: '요금 조회·납부' },
+    { type: 'sub', label: '서비스 퀵 가이드' },
+    { type: 'sub', label: '가입번호 조회' },
+  ],
+  '마이페이지': [
+    { type: 'item', label: '가입정보 조회·변경' },
+    { type: 'item', label: '이용량 조회' },
+    { type: 'item', label: '요금 조회 및 납부' },
+    { type: 'item', label: '요금제·부가서비스 변경' },
+    { type: 'item', label: '일시·분실 정지' },
+    { type: 'item', label: '나의 혜택 보기' },
+    { type: 'item', label: '회원정보 관리' },
+  ]
+};
+
+function renderRnb(menuName) {
+  const items = MENUS[menuName] || [];
+  const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+  let html = '';
+  items.forEach(item => {
+    if (item.type === 'group') {
+      html += `<div class="rnb-group-label">${item.label}</div>`;
+    } else if (item.type === 'sub') {
+      html += `<div class="rnb-item sub" onclick="toast('${item.label}');closeSide()">${item.label}${chevron}</div>`;
+    } else {
+      html += `<div class="rnb-item" onclick="toast('${item.label}');closeSide()">${item.label}${chevron}</div>`;
+    }
+  });
+  document.getElementById('sideRnb').innerHTML = html;
+}
+
+function selectLnb(el) {
+  document.querySelectorAll('.lnb-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  renderRnb(el.dataset.menu);
+}
+
+/* ══════════════════════
+   사이드 메뉴 열기/닫기
+══════════════════════ */
+function openSide() {
+  renderRnb('가입하기');
+  document.getElementById('sideOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSide() {
+  document.getElementById('sideOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // 첫번째 탭 초기화
+  document.querySelectorAll('.lnb-item').forEach(i => i.classList.remove('active'));
+  document.querySelector('.lnb-item').classList.add('active');
+}
+
+/* ══════════════════════
+   토스트
+══════════════════════ */
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+}
+</script>
+</body>
+</html>
