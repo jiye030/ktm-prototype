@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KTM App — Home [WIREFRAME]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════
+   WIREFRAME CSS VARIABLES
+═══════════════════════════════ */
+:root {
+  --wf-bg:              #F8F7F4;
+  --wf-surface:         #FFFFFF;
+  --wf-border:          #C8C4BC;
+  --wf-border-strong:   #8A8680;
+  --wf-accent:          #1A1A1A;
+  --wf-text:            #1A1A1A;
+  --wf-text-muted:      #7A7672;
+  --wf-text-placeholder:#B0ADA8;
+
+  --wf-crosshatch: repeating-linear-gradient(
+    45deg,
+    transparent, transparent 4px,
+    rgba(0,0,0,.04) 4px, rgba(0,0,0,.04) 5px
+  );
+  --wf-diag: repeating-linear-gradient(
+    -45deg,
+    transparent, transparent 6px,
+    rgba(0,0,0,.05) 6px, rgba(0,0,0,.05) 7px
+  );
+  --wf-grid:
+    linear-gradient(rgba(0,0,0,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.03) 1px, transparent 1px);
+
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font:      'IBM Plex Sans KR', sans-serif;
+  --radius:    3px;
+
+  /* App layout */
+  --notice-h: 48px;
+  --logo-h:   52px;
+  --tab-h:    40px;
+}
+
+/* ═══════════════════════════════
+   RESET & BASE
+═══════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font);
+  color: var(--wf-text);
+  background: var(--wf-bg);
+  background-image: var(--wf-grid);
+  background-size: 24px 24px;
+  max-width: 430px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  position: relative;
+}
+button { font-family: var(--font); cursor: pointer; border: none; background: none; }
+a { text-decoration: none; color: inherit; }
+
+/* ═══════════════════════════════
+   WIREFRAME ANNOTATIONS
+═══════════════════════════════ */
+.wf-label {
+  font-family: var(--font-mono);
+  font-size: 8px; font-weight: 500;
+  color: var(--wf-text-muted);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  position: absolute; top: 3px; left: 5px;
+  background: var(--wf-bg);
+  padding: 1px 4px;
+  pointer-events: none; z-index: 5;
+}
+.wf-component {
+  position: relative;
+  outline: 1.5px solid var(--wf-border);
+  outline-offset: -1px;
+}
+.wf-component::after {
+  content: attr(data-component);
+  position: absolute; top: -9px; right: 0;
+  font-family: var(--font-mono);
+  font-size: 7px; color: var(--wf-text-placeholder);
+  background: var(--wf-bg); padding: 0 3px;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════
+   FIXED BADGE
+═══════════════════════════════ */
+.page-badge {
+  position: fixed; top: 10px; right: 10px; z-index: 9999;
+  background: var(--wf-accent); color: #fff;
+  font-family: var(--font-mono);
+  font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+  padding: 4px 8px; border-radius: 2px;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════
+   IMAGE PLACEHOLDER
+═══════════════════════════════ */
+.wf-img {
+  background: var(--wf-crosshatch), var(--wf-bg);
+  border: 1.5px dashed var(--wf-border-strong);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.wf-img::before, .wf-img::after {
+  content: '';
+  position: absolute; background: rgba(0,0,0,.07);
+  height: 1px; width: 150%;
+  top: 50%; left: -25%;
+}
+.wf-img::before { transform: rotate(8deg); }
+.wf-img::after  { transform: rotate(-8deg); }
+.wf-img-label {
+  position: relative; z-index: 1;
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--wf-text-muted);
+  background: rgba(255,255,255,.85);
+  padding: 3px 8px; border: 1px dashed var(--wf-border-strong);
+  border-radius: 2px; pointer-events: none;
+  letter-spacing: .3px;
+}
+
+/* ═══════════════════════════════
+   BUTTONS
+═══════════════════════════════ */
+.wf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: var(--radius); font-weight: 700;
+  font-family: var(--font); font-size: 12px;
+  cursor: pointer;
+  border: 2px solid var(--wf-border-strong);
+  background: transparent; color: var(--wf-text);
+  transition: all .12s; position: relative;
+}
+.wf-btn:active { transform: scale(.98); }
+.wf-btn-primary { background: var(--wf-accent); color: #fff; border-color: var(--wf-accent); }
+.wf-btn-secondary { background: var(--wf-surface); border: 2px solid var(--wf-accent); color: var(--wf-accent); }
+.wf-btn-ghost { border: 1.5px dashed var(--wf-border-strong); color: var(--wf-text-muted); }
+.wf-btn-sm  { height: 32px; font-size: 11px; padding: 0 14px; }
+.wf-btn-md  { height: 40px; font-size: 12px; padding: 0 20px; }
+.wf-btn-lg  { height: 48px; font-size: 13px; padding: 0 28px; }
+.wf-btn-full { width: 100%; }
+.wf-btn-pill { border-radius: 50px; }
+
+/* BADGE CHIP */
+.wf-chip {
+  display: inline-flex; align-items: center;
+  padding: 2px 7px; border-radius: 2px;
+  font-size: 9px; font-weight: 700;
+  font-family: var(--font-mono); letter-spacing: .5px;
+  border: 1.5px solid var(--wf-border-strong);
+  color: var(--wf-text); background: var(--wf-surface);
+}
+.wf-chip-fill { background: var(--wf-accent); color: #fff; border-color: var(--wf-accent); }
+.wf-chip-dash { border-style: dashed; color: var(--wf-text-muted); }
+.wf-chip-double { border-style: double; border-width: 3px; }
+
+/* ═══════════════════════════════
+   A. NOTICE BANNER
+═══════════════════════════════ */
+.notice-banner {
+  height: var(--notice-h);
+  background: var(--wf-crosshatch), #eee;
+  border-bottom: 1.5px dashed var(--wf-border-strong);
+  display: flex; align-items: center;
+  padding: 0 12px; gap: 10px;
+  position: relative;
+}
+.notice-banner.hidden { display: none; }
+.notice-ico {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border: 1.5px solid var(--wf-border-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 13px;
+  background: var(--wf-surface);
+}
+.notice-text {
+  flex: 1; font-size: 11px; font-family: var(--font);
+  color: var(--wf-text); line-height: 1.4;
+}
+.notice-text strong { font-weight: 700; font-family: var(--font-mono); }
+.notice-close-btn {
+  width: 32px; height: 32px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--wf-border);
+  border-radius: var(--radius); color: var(--wf-text-muted);
+  background: var(--wf-surface);
+  font-family: var(--font-mono); font-size: 12px; cursor: pointer;
+}
+
+/* ═══════════════════════════════
+   B. LOGO BAR
+═══════════════════════════════ */
+.logo-bar {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--logo-h);
+  background: var(--wf-surface);
+  border-bottom: 2px solid var(--wf-accent);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 14px;
+}
+.logo-wrap {
+  display: flex; align-items: center; gap: 0;
+  border: 2px solid var(--wf-accent);
+  padding: 4px 10px; border-radius: var(--radius);
+}
+.logo-text {
+  font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+  color: var(--wf-accent); letter-spacing: -.5px;
+}
+.logo-sub {
+  font-family: var(--font-mono); font-size: 8px;
+  color: var(--wf-text-muted); letter-spacing: .8px;
+  margin-left: 4px; margin-top: 2px; align-self: flex-end;
+}
+.gnb-actions { display: flex; gap: 2px; }
+.gnb-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--wf-border); border-radius: var(--radius);
+  color: var(--wf-text); background: var(--wf-surface);
+  position: relative; cursor: pointer;
+  font-family: var(--font-mono); font-size: 14px;
+}
+.gnb-btn:active { background: var(--wf-bg); }
+.gnb-btn .badge-dot {
+  position: absolute; top: 6px; right: 6px;
+  width: 6px; height: 6px;
+  background: var(--wf-accent); border-radius: 50%;
+  border: 1.5px solid var(--wf-surface);
+}
+
+/* ═══════════════════════════════
+   C. GNB TABS
+═══════════════════════════════ */
+.gnb-tabs {
+  position: sticky; top: var(--logo-h); z-index: 99;
+  height: var(--tab-h);
+  background: var(--wf-surface);
+  border-bottom: 2px solid var(--wf-accent);
+  display: flex; align-items: stretch;
+  padding: 0 14px; gap: 0;
+}
+.gnb-tab {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--wf-text-muted);
+  font-family: var(--font-mono);
+  position: relative; cursor: pointer;
+  border-bottom: 3px solid transparent;
+  padding-bottom: 2px; white-space: nowrap;
+  letter-spacing: .2px;
+  transition: color .15s;
+}
+.gnb-tab.active {
+  color: var(--wf-accent);
+  border-bottom-color: var(--wf-accent);
+}
+.gnb-tab:active { opacity: .6; }
+
+/* ═══════════════════════════════
+   D. MAIN BANNER SLIDER
+═══════════════════════════════ */
+.banner-wrap {
+  position: relative; overflow: hidden;
+  background: var(--wf-bg);
+  width: 100%; aspect-ratio: 16 / 9;
+  border-bottom: 2px solid var(--wf-accent);
+}
+.banner-track {
+  display: flex; width: 100%; height: 100%;
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
+}
+.banner-slide {
+  min-width: 100%; width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 18px 18px 44px;
+  position: relative; overflow: hidden; flex-shrink: 0;
+}
+.bs1 { background: var(--wf-crosshatch), #e8e8e8; }
+.bs2 { background: var(--wf-diag), #e4e4e4; }
+.bs3 { background: var(--wf-grid); background-size: 20px 20px; background-color: #ebebeb; }
+
+.banner-slide::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(170deg, transparent 30%, rgba(255,255,255,.0) 100%);
+}
+/* diagonal X lines for slides */
+.bx::before, .bx::after {
+  content: '';
+  position: absolute;
+  background: rgba(0,0,0,.08); height: 1px; width: 150%; top: 50%; left: -25%;
+}
+.bx::before { transform: rotate(6deg); }
+.bx::after  { transform: rotate(-6deg); }
+
+.banner-content { position: relative; z-index: 1; }
+.banner-eyebrow {
+  display: inline-block;
+  border: 1.5px dashed var(--wf-border-strong);
+  background: rgba(255,255,255,.75);
+  color: var(--wf-text-muted);
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  padding: 3px 8px; border-radius: 2px;
+  margin-bottom: 6px; letter-spacing: .5px; text-transform: uppercase;
+}
+.banner-title {
+  font-size: 18px; font-weight: 700;
+  color: var(--wf-text); line-height: 1.3;
+  margin-bottom: 5px; letter-spacing: -.3px;
+  font-family: var(--font);
+}
+.banner-desc {
+  font-size: 11px; color: var(--wf-text-muted);
+  margin-bottom: 12px; line-height: 1.5;
+  font-family: var(--font-mono);
+}
+
+/* banner controls */
+.banner-nav {
+  position: absolute; bottom: 12px; right: 12px;
+  display: flex; align-items: center; gap: 5px; z-index: 2;
+}
+.bn-dot {
+  width: 16px; height: 6px; border-radius: 2px;
+  background: rgba(0,0,0,.15); border: 1.5px solid var(--wf-border-strong);
+  cursor: pointer; transition: all .2s;
+}
+.bn-dot.on { background: var(--wf-accent); border-color: var(--wf-accent); width: 22px; }
+.banner-ctrl {
+  position: absolute; bottom: 10px; left: 12px;
+  display: flex; align-items: center; gap: 5px; z-index: 2;
+}
+.bn-count {
+  background: var(--wf-surface); border: 1.5px solid var(--wf-border-strong);
+  color: var(--wf-text-muted);
+  font-size: 9px; font-weight: 700; font-family: var(--font-mono);
+  padding: 2px 7px; border-radius: 2px; letter-spacing: .5px;
+}
+.bn-pause {
+  width: 22px; height: 22px;
+  background: var(--wf-surface); border: 1.5px solid var(--wf-border-strong);
+  border-radius: var(--radius); color: var(--wf-text-muted);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 9px; cursor: pointer;
+}
+/* slide image placeholder text */
+.bs-placeholder {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-family: var(--font-mono); font-size: 10px; color: var(--wf-text-placeholder);
+  background: rgba(255,255,255,.8); padding: 3px 10px;
+  border: 1px dashed var(--wf-border-strong); border-radius: 2px;
+  white-space: nowrap; pointer-events: none; letter-spacing: .3px;
+}
+
+/* ═══════════════════════════════
+   E. QUICK BAR
+═══════════════════════════════ */
+.quick-bar {
+  background: var(--wf-surface);
+  padding: 12px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  border-bottom: 2px solid var(--wf-border);
+  position: relative;
+}
+.qi {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 12px;
+  background: var(--wf-bg); border-radius: var(--radius);
+  border: 1.5px solid var(--wf-border);
+  cursor: pointer; transition: all .15s;
+}
+.qi:active { border-color: var(--wf-accent); background: #f0eeea; }
+.qi-ico {
+  width: 32px; height: 32px; border-radius: var(--radius);
+  background: var(--wf-surface);
+  border: 1.5px solid var(--wf-border-strong);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-family: var(--font-mono); font-size: 11px;
+  color: var(--wf-text-muted);
+}
+.qi-label { font-size: 11px; font-weight: 700; color: var(--wf-text); }
+.qi-sub   { font-size: 9px; color: var(--wf-text-muted); margin-top: 1px; font-family: var(--font-mono); }
+
+/* ═══════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════ */
+.sec {
+  background: var(--wf-surface);
+  padding: 18px 0 6px;
+  position: relative;
+}
+.sec + .sec { border-top: 8px solid var(--wf-bg); }
+.sec-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 14px; margin-bottom: 12px;
+}
+.sec-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--wf-text); font-family: var(--font);
+}
+.sec-title-mono {
+  font-size: 11px; font-weight: 700;
+  color: var(--wf-text); font-family: var(--font-mono);
+  letter-spacing: .3px; text-transform: uppercase;
+}
+.sec-sub { font-size: 10px; color: var(--wf-text-muted); margin-top: 2px; font-family: var(--font-mono); }
+.sec-more {
+  font-size: 10px; color: var(--wf-text-muted); font-weight: 500;
+  display: flex; align-items: center; gap: 2px;
+  white-space: nowrap; font-family: var(--font-mono);
+  border: 1px dashed var(--wf-border); padding: 3px 8px; border-radius: 2px;
+  background: var(--wf-bg);
+}
+.sec-more:active { opacity: .6; }
+.hscroll {
+  overflow-x: auto; padding: 0 14px 14px;
+  display: flex; gap: 8px;
+  scrollbar-width: none;
+}
+.hscroll::-webkit-scrollbar { display: none; }
+
+/* ═══════════════════════════════
+   F. RATE PLAN CARDS (Section C)
+═══════════════════════════════ */
+.rate-tabs {
+  display: flex; gap: 6px;
+  padding: 0 14px; margin-bottom: 12px;
+}
+.rtab {
+  height: 28px; padding: 0 12px;
+  border-radius: 2px;
+  font-size: 10px; font-weight: 700; font-family: var(--font-mono);
+  background: var(--wf-bg); color: var(--wf-text-muted);
+  border: 1.5px solid var(--wf-border);
+  transition: all .18s; letter-spacing: .3px;
+  cursor: pointer;
+}
+.rtab.on { background: var(--wf-accent); color: #fff; border-color: var(--wf-accent); }
+
+.rate-card {
+  min-width: 148px; max-width: 148px;
+  background: var(--wf-surface);
+  border: 1.5px solid var(--wf-border);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  position: relative; overflow: hidden; cursor: pointer;
+  transition: all .15s;
+}
+.rate-card:active { border-color: var(--wf-accent); box-shadow: 3px 3px 0 var(--wf-accent); }
+.rate-card.pop {
+  border: 2px solid var(--wf-accent);
+  box-shadow: 2px 2px 0 var(--wf-accent);
+}
+.rate-card.pop::before {
+  content: 'FEATURED';
+  position: absolute; top: -9px; left: 10px;
+  font-family: var(--font-mono); font-size: 7px; font-weight: 700;
+  letter-spacing: 1px; background: var(--wf-accent); color: #fff;
+  padding: 1px 6px; border-radius: 1px;
+}
+.rc-badge {
+  display: inline-flex; align-items: center; gap: 2px;
+  font-size: 8px; font-weight: 700; font-family: var(--font-mono);
+  padding: 2px 6px; border-radius: 1px;
+  border: 1.5px solid var(--wf-border-strong);
+  margin-bottom: 8px; letter-spacing: .3px;
+  color: var(--wf-text);
+}
+.rc-badge.fill { background: var(--wf-accent); color: #fff; border-color: var(--wf-accent); }
+.rc-badge.dash { border-style: dashed; color: var(--wf-text-muted); }
+.rc-badge.dbl  { border-style: double; border-width: 3px; }
+
+.rc-data {
+  font-size: 28px; font-weight: 700;
+  color: var(--wf-text); line-height: 1; letter-spacing: -1px;
+  margin-bottom: 2px; font-family: var(--font-mono);
+}
+.rc-data span { font-size: 13px; font-weight: 500; color: var(--wf-text-muted); margin-left: 1px; }
+.rc-meta {
+  font-size: 9px; color: var(--wf-text-muted);
+  line-height: 1.7; margin-bottom: 10px; font-family: var(--font-mono);
+  border-top: 1px dashed var(--wf-border); padding-top: 8px;
+}
+.rc-price {
+  font-size: 16px; font-weight: 700; color: var(--wf-text);
+  letter-spacing: -.5px; margin-bottom: 8px; font-family: var(--font-mono);
+}
+.rc-price span { font-size: 9px; font-weight: 400; color: var(--wf-text-muted); letter-spacing: 0; }
+.rc-btn {
+  width: 100%; height: 30px;
+  border: 2px solid var(--wf-accent); background: var(--wf-accent);
+  color: #fff; border-radius: var(--radius);
+  font-size: 10px; font-weight: 700; font-family: var(--font-mono);
+  letter-spacing: .3px; cursor: pointer;
+}
+.rate-card.pop .rc-btn { background: var(--wf-accent); }
+.rc-btn:active { opacity: .8; }
+
+/* ═══════════════════════════════
+   G. EVENT CARDS (Section D)
+═══════════════════════════════ */
+.ev-card {
+  min-width: 200px; border-radius: var(--radius);
+  overflow: hidden; cursor: pointer;
+  border: 1.5px solid var(--wf-border);
+  background: var(--wf-surface); transition: all .15s;
+}
+.ev-card:active { border-color: var(--wf-accent); }
+.ev-thumb {
+  height: 90px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.ev-thumb.et1 { background: var(--wf-crosshatch), #e5e5e5; }
+.ev-thumb.et2 { background: var(--wf-diag),       #e8e8e8; }
+.ev-thumb.et3 { background: var(--wf-grid); background-size: 16px 16px; background-color: #eee; }
+.ev-thumb::before, .ev-thumb::after {
+  content: '';
+  position: absolute;
+  background: rgba(0,0,0,.08); height: 1px; width: 150%; top: 50%; left: -25%;
+}
+.ev-thumb::before { transform: rotate(6deg); }
+.ev-thumb::after  { transform: rotate(-6deg); }
+.ev-thumb-label {
+  position: relative; z-index: 1;
+  font-family: var(--font-mono); font-size: 9px; color: var(--wf-text-muted);
+  background: rgba(255,255,255,.85); padding: 2px 8px;
+  border: 1px dashed var(--wf-border-strong); border-radius: 2px;
+  letter-spacing: .3px;
+}
+.ev-status {
+  position: absolute; top: 8px; right: 8px; z-index: 2;
+  font-family: var(--font-mono); font-size: 8px; font-weight: 700;
+  padding: 2px 6px; border-radius: 1px; letter-spacing: .5px;
+}
+.es-live { background: var(--wf-accent); color: #fff; }
+.es-soon { background: var(--wf-surface); border: 1.5px dashed var(--wf-border-strong); color: var(--wf-text-muted); }
+.ev-body { padding: 10px 12px 12px; }
+.ev-title { font-size: 11px; font-weight: 700; color: var(--wf-text); margin-bottom: 4px; line-height: 1.4; }
+.ev-period { font-size: 9px; color: var(--wf-text-muted); font-family: var(--font-mono); }
+
+/* ═══════════════════════════════
+   H. FEATURES GRID (Section E)
+═══════════════════════════════ */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  border-top: 1.5px solid var(--wf-border);
+  background: var(--wf-border);
+  margin-bottom: 6px;
+}
+.feat {
+  background: var(--wf-surface);
+  padding: 14px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+  cursor: pointer; transition: background .15s; position: relative;
+}
+.feat.wide { grid-column: span 2; }
+.feat:active { background: var(--wf-bg); }
+.feat-ico {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border: 1.5px solid var(--wf-border-strong);
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 14px;
+}
+.feat-title { font-size: 11px; font-weight: 700; color: var(--wf-text); margin-bottom: 3px; }
+.feat-desc  { font-size: 9px; color: var(--wf-text-muted); line-height: 1.5; font-family: var(--font-mono); }
+
+/* ═══════════════════════════════
+   I. REVIEW CARDS (Section F)
+═══════════════════════════════ */
+.rv-card {
+  min-width: 200px;
+  background: var(--wf-surface);
+  border: 1.5px solid var(--wf-border);
+  border-radius: var(--radius); padding: 14px;
+}
+.rv-stars {
+  font-size: 10px; color: var(--wf-accent); margin-bottom: 5px;
+  font-family: var(--font-mono); letter-spacing: 1px;
+}
+.rv-plan {
+  font-size: 9px; font-weight: 700; font-family: var(--font-mono);
+  border: 1.5px solid var(--wf-border-strong); padding: 2px 6px;
+  border-radius: 1px; display: inline-block; margin-bottom: 8px;
+  color: var(--wf-text-muted); letter-spacing: .3px;
+}
+.rv-text { font-size: 10px; color: var(--wf-text); line-height: 1.6; margin-bottom: 8px; }
+.rv-author { font-size: 9px; color: var(--wf-text-muted); font-family: var(--font-mono); }
+
+/* ═══════════════════════════════
+   J. APP DOWNLOAD BANNER (Section G)
+═══════════════════════════════ */
+.app-sec { padding-top: 18px; border-top: 8px solid var(--wf-bg); }
+.app-banner {
+  margin: 0 14px 18px;
+  background: var(--wf-crosshatch), var(--wf-bg);
+  border: 2px solid var(--wf-accent);
+  border-radius: var(--radius);
+  padding: 20px 16px; position: relative; overflow: hidden;
+}
+.app-banner::before {
+  content: 'APP DOWNLOAD';
+  position: absolute; top: 8px; right: 8px;
+  font-family: var(--font-mono); font-size: 7px; font-weight: 700;
+  color: var(--wf-text-placeholder); letter-spacing: 1px;
+}
+.app-title { font-size: 13px; font-weight: 700; color: var(--wf-text); margin-bottom: 5px; }
+.app-desc  { font-size: 10px; color: var(--wf-text-muted); line-height: 1.6; margin-bottom: 14px; font-family: var(--font-mono); }
+.app-btns  { display: flex; gap: 8px; }
+.app-btn {
+  display: flex; align-items: center; gap: 6px;
+  height: 36px; padding: 0 14px;
+  border: 2px solid var(--wf-accent); border-radius: var(--radius);
+  background: var(--wf-surface); color: var(--wf-text);
+  font-size: 10px; font-weight: 700; font-family: var(--font-mono);
+  letter-spacing: .3px; cursor: pointer; transition: all .15s;
+}
+.app-btn svg { width: 14px; height: 14px; }
+.app-btn:active { background: var(--wf-accent); color: #fff; }
+
+/* ═══════════════════════════════
+   K. SIDE MENU OVERLAY
+═══════════════════════════════ */
+.side-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,.4);
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s, visibility .25s;
+}
+.side-overlay.open { opacity: 1; visibility: visible; }
+.side-panel {
+  position: absolute; top: 0; right: 0;
+  width: 300px; height: 100%;
+  background: var(--wf-surface);
+  border-left: 2px solid var(--wf-accent);
+  transform: translateX(100%);
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  background-image: var(--wf-grid); background-size: 24px 24px;
+}
+.side-overlay.open .side-panel { transform: translateX(0); }
+
+/* Side top bar */
+.side-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 12px;
+  height: 48px;
+  border-bottom: 2px solid var(--wf-accent);
+  background: var(--wf-surface); flex-shrink: 0;
+}
+.side-topbar-left { display: flex; align-items: center; }
+.side-topbar-right { display: flex; gap: 2px; }
+
+/* Side user area */
+.side-user-area {
+  padding: 14px 14px 12px;
+  border-bottom: 1.5px solid var(--wf-border);
+  background: var(--wf-crosshatch), #f0eeea; flex-shrink: 0;
+}
+.side-greeting {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; font-weight: 700; color: var(--wf-text);
+  margin-bottom: 12px; cursor: pointer;
+  padding: 8px 10px;
+  border: 1.5px solid var(--wf-border); border-radius: var(--radius);
+  background: var(--wf-surface);
+}
+.side-greeting svg { width: 14px; height: 14px; color: var(--wf-text-muted); }
+.side-shortcuts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.ssc {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 8px 4px;
+  border: 1.5px solid var(--wf-border); border-radius: var(--radius);
+  background: var(--wf-surface); cursor: pointer; transition: all .15s;
+}
+.ssc:active { border-color: var(--wf-accent); background: var(--wf-bg); }
+.ssc-ico   { font-size: 16px; line-height: 1; }
+.ssc-label { font-size: 8px; font-weight: 700; font-family: var(--font-mono); color: var(--wf-text-muted); text-align: center; line-height: 1.3; letter-spacing: .2px; }
+
+/* Side 2-panel menus */
+.side-menus {
+  display: flex; flex: 1; overflow: hidden;
+  border-top: 1.5px solid var(--wf-border);
+}
+.side-lnb {
+  width: 88px; flex-shrink: 0;
+  border-right: 2px solid var(--wf-accent);
+  overflow-y: auto; background: var(--wf-bg);
+}
+.lnb-item {
+  display: block; padding: 12px 10px;
+  font-size: 11px; font-weight: 700; font-family: var(--font-mono);
+  color: var(--wf-text-muted); cursor: pointer;
+  border-bottom: 1px dashed var(--wf-border);
+  transition: all .15s; letter-spacing: .2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lnb-item.active {
+  background: var(--wf-surface);
+  color: var(--wf-accent);
+  border-right: 2px solid var(--wf-accent);
+  margin-right: -2px;
+}
+.side-rnb { flex: 1; overflow-y: auto; background: var(--wf-surface); }
+.rnb-group-label {
+  padding: 10px 12px 4px;
+  font-size: 8px; font-weight: 700; font-family: var(--font-mono);
+  color: var(--wf-text-placeholder); letter-spacing: 1.2px; text-transform: uppercase;
+  border-bottom: 1px solid var(--wf-border);
+}
+.rnb-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 12px;
+  font-size: 11px; color: var(--wf-text);
+  border-bottom: 1px dashed var(--wf-border);
+  cursor: pointer; transition: all .12s;
+}
+.rnb-item:active { background: var(--wf-bg); padding-left: 16px; }
+.rnb-item svg { width: 11px; height: 11px; color: var(--wf-text-muted); }
+.rnb-item.sub { color: var(--wf-text-muted); font-size: 10px; }
+
+/* ═══════════════════════════════
+   TOAST
+═══════════════════════════════ */
+.toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: var(--wf-accent); color: #fff;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .3px;
+  padding: 8px 16px; border-radius: 2px;
+  opacity: 0; transition: opacity .2s, transform .2s;
+  pointer-events: none; white-space: nowrap; z-index: 9000;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════
+   SCROLL-TOP
+═══════════════════════════════ */
+.scroll-top {
+  position: fixed; bottom: 20px; right: 20px;
+  width: 36px; height: 36px;
+  background: var(--wf-surface);
+  border: 2px solid var(--wf-accent);
+  border-radius: var(--radius);
+  font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+  color: var(--wf-accent); cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+  z-index: 500;
+}
+.scroll-top.visible { display: flex; }
+
+/* ═══════════════════════════════
+   SECTION DIVIDER (tall)
+═══════════════════════════════ */
+.sec-divider {
+  height: 8px;
+  background: var(--wf-bg);
+  border-top: 1.5px solid var(--wf-border);
+  border-bottom: 1.5px solid var(--wf-border);
+}
+
+/* ═══════════════════════════════
+   FOOTER (BOTTOM NAV mock)
+═══════════════════════════════ */
+.footer-note {
+  background: var(--wf-surface);
+  border-top: 2px solid var(--wf-accent);
+  padding: 14px 14px 20px;
+  font-size: 8px; font-family: var(--font-mono);
+  color: var(--wf-text-placeholder); line-height: 1.8;
+  letter-spacing: .2px;
+}
+.footer-note strong { color: var(--wf-text-muted); }
+</style>
+</head>
+<body>
+
+<!-- WIREFRAME BADGE -->
+<div class="page-badge">[APP WIREFRAME]</div>
+
+<!-- ════════════
+  NOTICE BANNER
+════════════ -->
+<div class="notice-banner wf-component" data-component="notice-banner" id="noticeBanner">
+  <div class="wf-label">notice</div>
+  <div class="notice-ico">📢</div>
+  <div class="notice-text">
+    <strong>[공지]</strong> 신규 가입 시 첫 달 요금 50% 할인 이벤트 진행 중
+  </div>
+  <button class="notice-close-btn" onclick="closeNotice()">✕</button>
+</div>
+
+<!-- ════════════
+  LOGO BAR
+════════════ -->
+<div class="logo-bar wf-component" data-component="gnb-logo-bar">
+  <div class="wf-label">gnb / logo-bar</div>
+  <div class="logo-wrap">
+    <span class="logo-text">KT M</span>
+    <span class="logo-sub">MOBILE</span>
+  </div>
+  <div class="gnb-actions">
+    <button class="gnb-btn" onclick="toast('검색')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="gnb-btn" onclick="toast('알림')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="badge-dot"></span>
+    </button>
+    <button class="gnb-btn" onclick="openSide()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ════════════
+  GNB TABS
+════════════ -->
+<div class="gnb-tabs wf-component" data-component="gnb-tabs">
+  <div class="gnb-tab active" onclick="setTab(this,'가입하기')">가입하기</div>
+  <div class="gnb-tab" onclick="setTab(this,'상품')">상품</div>
+  <div class="gnb-tab" onclick="setTab(this,'혜택')">혜택</div>
+  <div class="gnb-tab" onclick="setTab(this,'결합')">결합</div>
+  <div class="gnb-tab" onclick="setTab(this,'고객센터')">고객센터</div>
+</div>
+
+<!-- ════════════
+  MAIN CONTENT
+════════════ -->
+<main>
+
+  <!-- 섹션 A: 메인 배너 슬라이더 -->
+  <div class="banner-wrap wf-component" data-component="banner-slider">
+    <div class="wf-label">section-A / main-banner</div>
+    <div class="banner-track" id="bannerTrack">
+
+      <!-- slide 1 -->
+      <div class="banner-slide bs1">
+        <div class="bs-placeholder">IMAGE PLACEHOLDER 1 / 3</div>
+        <div class="banner-content">
+          <div class="banner-eyebrow">CAMPAIGN · 2026</div>
+          <div class="banner-title">kt M모바일<br>최저가 요금제</div>
+          <div class="banner-desc">월 9,900원부터 시작하는 합리적인 통신</div>
+          <button class="wf-btn wf-btn-primary wf-btn-sm wf-btn-pill" onclick="toast('요금제 보기')">요금제 보기 →</button>
+        </div>
+      </div>
+
+      <!-- slide 2 -->
+      <div class="banner-slide bs2">
+        <div class="bs-placeholder">IMAGE PLACEHOLDER 2 / 3</div>
+        <div class="banner-content">
+          <div class="banner-eyebrow">NEW · eSIM</div>
+          <div class="banner-title">eSIM으로<br>더 간편하게</div>
+          <div class="banner-desc">실물 유심 없이 바로 개통</div>
+          <button class="wf-btn wf-btn-primary wf-btn-sm wf-btn-pill" onclick="toast('eSIM 안내')">eSIM 알아보기 →</button>
+        </div>
+      </div>
+
+      <!-- slide 3 -->
+      <div class="banner-slide bs3">
+        <div class="bs-placeholder">IMAGE PLACEHOLDER 3 / 3</div>
+        <div class="banner-content">
+          <div class="banner-eyebrow">FAMILY · BUNDLE</div>
+          <div class="banner-title">가족이 함께<br>더 저렴하게</div>
+          <div class="banner-desc">가족 결합 시 최대 30% 추가 할인</div>
+          <button class="wf-btn wf-btn-primary wf-btn-sm wf-btn-pill" onclick="toast('결합 혜택')">결합 혜택 보기 →</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- controls -->
+    <div class="banner-ctrl">
+      <div class="bn-count" id="bnCount">1 / 3</div>
+      <button class="bn-pause" id="bnPauseBtn" onclick="togglePause()">⏸</button>
+    </div>
+    <div class="banner-nav" id="bannerNav">
+      <div class="bn-dot on" onclick="goSlide(0)"></div>
+      <div class="bn-dot"    onclick="goSlide(1)"></div>
+      <div class="bn-dot"    onclick="goSlide(2)"></div>
+    </div>
+  </div>
+
+  <!-- 섹션 B: 빠른 가입 바 -->
+  <div class="quick-bar wf-component" data-component="quick-signup-bar">
+    <div class="wf-label">section-B / quick-bar</div>
+
+    <div class="qi" onclick="toast('유심 없이 가입')">
+      <div class="qi-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      </div>
+      <div>
+        <div class="qi-label">유심 없이 가입</div>
+        <div class="qi-sub">유심+요금제 동시</div>
+      </div>
+    </div>
+
+    <div class="qi" onclick="toast('유심 있이 가입')">
+      <div class="qi-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div class="qi-label">유심 있이 가입</div>
+        <div class="qi-sub">요금제만 신청</div>
+      </div>
+    </div>
+
+    <div class="qi" onclick="toast('eSIM 가입')">
+      <div class="qi-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div>
+        <div class="qi-label">eSIM 가입</div>
+        <div class="qi-sub">실물 유심 불필요</div>
+      </div>
+    </div>
+
+    <div class="qi" onclick="toast('요금제 전체 보기')">
+      <div class="qi-ico">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </div>
+      <div>
+        <div class="qi-label">요금제 보기</div>
+        <div class="qi-sub">전체 비교</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 섹션 C: 추천 요금제 -->
+  <section class="sec wf-component" data-component="rate-plan-section">
+    <div class="wf-label">section-C / rate-plans</div>
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">이달의 추천 요금제</div>
+        <div class="sec-sub">나에게 딱 맞는 요금제 찾기</div>
+      </div>
+      <button class="sec-more" onclick="toast('요금제 전체')">전체보기 →</button>
+    </div>
+    <div class="rate-tabs">
+      <button class="rtab on">유심 요금제</button>
+      <button class="rtab" onclick="toast('휴대폰 요금제')">휴대폰 요금제</button>
+    </div>
+    <div class="hscroll">
+      <div class="rate-card pop">
+        <div class="rc-badge fill">🔥 인기</div>
+        <div class="rc-data">3<span>GB</span></div>
+        <div class="rc-meta">통화 무제한 · 문자 무제한<br>소진 후 400Kbps 무제한</div>
+        <div class="rc-price">12,900<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('데이터 3GB 가입')">가입하기</button>
+      </div>
+      <div class="rate-card">
+        <div class="rc-badge dash">✨ NEW</div>
+        <div class="rc-data">10<span>GB</span></div>
+        <div class="rc-meta">통화 무제한 · 문자 무제한<br>소진 후 1Mbps 무제한</div>
+        <div class="rc-price">19,800<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('데이터 10GB 가입')">가입하기</button>
+      </div>
+      <div class="rate-card">
+        <div class="rc-badge dbl">👍 추천</div>
+        <div class="rc-data">1<span>GB</span></div>
+        <div class="rc-meta">통화 100분 · 문자 무제한<br>소진 후 200Kbps 무제한</div>
+        <div class="rc-price">9,900<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('데이터 1GB 가입')">가입하기</button>
+      </div>
+      <div class="rate-card">
+        <div class="rc-badge fill">🚀 인기</div>
+        <div class="rc-data" style="font-size:20px;letter-spacing:-.5px">무제한</div>
+        <div class="rc-meta">통화 무제한 · 문자 무제한<br>완전 무제한 데이터</div>
+        <div class="rc-price">29,900<span>원/월</span></div>
+        <button class="rc-btn" onclick="toast('무제한 가입')">가입하기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 D: HOT 이벤트 -->
+  <section class="sec wf-component" data-component="event-section">
+    <div class="wf-label">section-D / events</div>
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">HOT 이벤트</div>
+        <div class="sec-sub">지금 놓치면 아쉬운 혜택</div>
+      </div>
+      <button class="sec-more" onclick="toast('이벤트 전체')">전체보기 →</button>
+    </div>
+    <div class="hscroll">
+      <div class="ev-card" onclick="toast('신규가입 특별혜택')">
+        <div class="ev-thumb et1">
+          <span class="ev-thumb-label">EVENT IMAGE 1</span>
+          <div class="ev-status es-live">LIVE</div>
+        </div>
+        <div class="ev-body">
+          <div class="ev-title">신규가입 특별 혜택 이벤트</div>
+          <div class="ev-period">2026.03.01 ~ 03.31</div>
+        </div>
+      </div>
+      <div class="ev-card" onclick="toast('친구 초대 이벤트')">
+        <div class="ev-thumb et2">
+          <span class="ev-thumb-label">EVENT IMAGE 2</span>
+          <div class="ev-status es-live">LIVE</div>
+        </div>
+        <div class="ev-body">
+          <div class="ev-title">친구 초대하고 데이터 받자</div>
+          <div class="ev-period">2026.03.01 ~ 03.31</div>
+        </div>
+      </div>
+      <div class="ev-card" onclick="toast('리뷰 작성 이벤트')">
+        <div class="ev-thumb et3">
+          <span class="ev-thumb-label">EVENT IMAGE 3</span>
+          <div class="ev-status es-soon">SOON</div>
+        </div>
+        <div class="ev-body">
+          <div class="ev-title">후기 남기고 상품권 받기</div>
+          <div class="ev-period">2026.04.01 ~ 04.30</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 E: 서비스 특징 -->
+  <section class="sec wf-component" data-component="features-section" style="padding-bottom:6px;">
+    <div class="wf-label">section-E / features</div>
+    <div class="sec-head" style="margin-bottom:4px;">
+      <div class="sec-title">왜 kt M모바일인가요?</div>
+    </div>
+    <div class="features-grid">
+      <div class="feat wide" onclick="toast('KT망 안내')">
+        <div class="feat-ico">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">KT망 그대로, 더 저렴하게</div>
+          <div class="feat-desc">동일한 KT 통신망을 사용하면서 합리적인 가격으로 이용하세요.</div>
+        </div>
+      </div>
+      <div class="feat" onclick="toast('24시간 개통')">
+        <div class="feat-ico">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">24시간 셀프 개통</div>
+          <div class="feat-desc">온라인으로 언제든 간편하게</div>
+        </div>
+      </div>
+      <div class="feat" onclick="toast('약정 없음')">
+        <div class="feat-ico">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <div class="feat-title">약정 없음</div>
+          <div class="feat-desc">부담 없이 자유롭게 변경</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 F: 고객 후기 -->
+  <section class="sec wf-component" data-component="reviews-section">
+    <div class="wf-label">section-F / reviews</div>
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">고객 사용 후기</div>
+        <div class="sec-sub">실제 이용 고객의 생생한 후기</div>
+      </div>
+      <button class="sec-more" onclick="toast('전체 후기')">전체보기 →</button>
+    </div>
+    <div class="hscroll">
+      <div class="rv-card">
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-plan">DATA-3GB</div>
+        <div class="rv-text">가격 대비 너무 만족스러워요. 통화도 잘 되고 데이터도 충분해서 매달 잘 쓰고 있습니다!</div>
+        <div class="rv-author">김*진 · 2026.03.10</div>
+      </div>
+      <div class="rv-card">
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-plan">DATA-1GB</div>
+        <div class="rv-text">와이파이 주로 쓰는데 월 9,900원이면 완전 가성비. 개통도 정말 쉬웠어요.</div>
+        <div class="rv-author">이*수 · 2026.03.08</div>
+      </div>
+      <div class="rv-card">
+        <div class="rv-stars">★★★★☆</div>
+        <div class="rv-plan">무제한 요금제</div>
+        <div class="rv-text">타사 대비 훨씬 저렴한데 KT망이라 속도도 동일하게 빠릅니다. 강력 추천해요!</div>
+        <div class="rv-author">박*민 · 2026.03.05</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 G: 앱 다운로드 -->
+  <div class="app-sec sec wf-component" data-component="app-download">
+    <div class="wf-label">section-G / app-download</div>
+    <div class="app-banner">
+      <div class="app-title">언제 어디서나, 앱으로 더 편리하게</div>
+      <div class="app-desc">요금 조회, 부가서비스 신청,<br>고객센터까지 한번에</div>
+      <div class="app-btns">
+        <button class="app-btn" onclick="toast('Google Play')">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M3 20.5v-17c0-.8.9-1.3 1.6-.9l14 8.5c.7.4.7 1.4 0 1.8l-14 8.5c-.7.4-1.6-.1-1.6-.9z"/></svg>
+          Google Play
+        </button>
+        <button class="app-btn" onclick="toast('App Store')">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div class="footer-note">
+    <strong>KT M모바일</strong> · 알뜰폰 사업자<br>
+    고객센터: 1588-0010 · 개통시간: 08:00~21:50<br>
+    <span style="color:var(--wf-text-placeholder)">© 2026 KT M모바일. All rights reserved.</span>
+  </div>
+
+</main>
+
+<!-- ════════════
+  SIDE MENU OVERLAY
+════════════ -->
+<div class="side-overlay" id="sideOverlay" onclick="handleOverlayClick(event)">
+  <div class="side-panel" id="sidePanel">
+
+    <!-- 상단 바 -->
+    <div class="side-topbar">
+      <div class="side-topbar-left">
+        <button class="gnb-btn" onclick="closeSide()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
+      </div>
+      <div class="side-topbar-right">
+        <button class="gnb-btn" onclick="toast('로그아웃')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+        <button class="gnb-btn" onclick="toast('설정')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+        <button class="gnb-btn" onclick="closeSide()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 사용자 영역 -->
+    <div class="side-user-area">
+      <div class="side-greeting" onclick="toast('마이페이지')">
+        <span>안녕하세요, <strong>최*예 님</strong></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="side-shortcuts">
+        <div class="ssc" onclick="toast('요금제 조회')">
+          <div class="ssc-ico">💳</div>
+          <div class="ssc-label">요금제</div>
+        </div>
+        <div class="ssc" onclick="toast('신청조회')">
+          <div class="ssc-ico">🔍</div>
+          <div class="ssc-label">신청조회</div>
+        </div>
+        <div class="ssc" onclick="toast('자주묻는질문')">
+          <div class="ssc-ico">💬</div>
+          <div class="ssc-label">자주묻는<br>질문</div>
+        </div>
+        <div class="ssc" onclick="toast('교체유심신청')">
+          <div class="ssc-ico">🔄</div>
+          <div class="ssc-label">교체유심<br>신청</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2단 메뉴 -->
+    <div class="side-menus">
+      <div class="side-lnb" id="sideLnb">
+        <div class="lnb-item active" data-menu="가입하기" onclick="selectLnb(this)">가입하기</div>
+        <div class="lnb-item" data-menu="상품"     onclick="selectLnb(this)">상품</div>
+        <div class="lnb-item" data-menu="혜택"     onclick="selectLnb(this)">혜택</div>
+        <div class="lnb-item" data-menu="결합"     onclick="selectLnb(this)">결합</div>
+        <div class="lnb-item" data-menu="고객센터" onclick="selectLnb(this)">고객센터</div>
+        <div class="lnb-item" data-menu="마이페이지" onclick="selectLnb(this)">마이페이지</div>
+      </div>
+      <div class="side-rnb" id="sideRnb"></div>
+    </div>
+
+  </div><!-- /side-panel -->
+</div><!-- /side-overlay -->
+
+<!-- TOAST -->
+<div class="toast" id="toastEl"></div>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+/* ══════════════════════
+   배너 슬라이더
+══════════════════════ */
+let cur = 0, total = 3, paused = false, timer;
+
+function goSlide(n) {
+  cur = n;
+  document.getElementById('bannerTrack').style.transform = `translateX(-${n * 100}%)`;
+  document.querySelectorAll('.bn-dot').forEach((d, i) => d.classList.toggle('on', i === n));
+  document.getElementById('bnCount').textContent = `${n + 1} / ${total}`;
+}
+function nextSlide() { goSlide((cur + 1) % total); }
+function startTimer() { timer = setInterval(nextSlide, 3500); }
+function togglePause() {
+  paused = !paused;
+  document.getElementById('bnPauseBtn').textContent = paused ? '▶' : '⏸';
+  if (paused) clearInterval(timer); else startTimer();
+}
+startTimer();
+
+/* ══════════════════════
+   공지 닫기
+══════════════════════ */
+function closeNotice() {
+  document.getElementById('noticeBanner').classList.add('hidden');
+}
+
+/* ══════════════════════
+   GNB 탭
+══════════════════════ */
+function setTab(el, name) {
+  document.querySelectorAll('.gnb-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  toast(name + ' 페이지로 이동');
+}
+
+/* ══════════════════════
+   사이드 메뉴 데이터
+══════════════════════ */
+const MENUS = {
+  '가입하기': [
+    { type: 'group', label: 'USIM' },
+    { type: 'sub',   label: '유심 없이 가입' },
+    { type: 'sub',   label: '유심 있이 가입' },
+    { type: 'group', label: '유심 타입' },
+    { type: 'sub',   label: 'eSIM 가입' },
+    { type: 'sub',   label: '워치 개통' },
+    { type: 'group', label: '유심 구매' },
+    { type: 'sub',   label: '다이렉트몰' },
+    { type: 'sub',   label: '오픈마켓' },
+    { type: 'sub',   label: '편의점·마트' },
+  ],
+  '상품': [
+    { type: 'group', label: '요금제' },
+    { type: 'sub',   label: '요금제 목록' },
+    { type: 'sub',   label: '요금제 비교' },
+    { type: 'group', label: '부가서비스' },
+    { type: 'sub',   label: '전체 부가서비스' },
+    { type: 'sub',   label: '해외 로밍' },
+    { type: 'group', label: '추가서비스' },
+    { type: 'sub',   label: '함께쓰기' },
+    { type: 'sub',   label: '데이터쉐어링' },
+    { type: 'sub',   label: '휴대폰안심보험' },
+    { type: 'sub',   label: '새 휴대폰' },
+  ],
+  '혜택': [
+    { type: 'group', label: '이벤트' },
+    { type: 'sub',   label: '이번달 이벤트' },
+    { type: 'sub',   label: '당첨자 확인' },
+    { type: 'group', label: '참여 혜택' },
+    { type: 'sub',   label: '친구 초대' },
+    { type: 'sub',   label: '가입 리뷰 작성' },
+  ],
+  '결합': [
+    { type: 'item',  label: '아무나 SOLO 결합' },
+    { type: 'item',  label: '아무나 가족 결합+' },
+    { type: 'item',  label: 'KT인터넷 트리플할인' },
+  ],
+  '고객센터': [
+    { type: 'group', label: '이용·공지' },
+    { type: 'sub',   label: '공지사항' },
+    { type: 'sub',   label: '고객센터 안내' },
+    { type: 'sub',   label: '개통 가이드' },
+    { type: 'sub',   label: '단말기 AS 안내' },
+    { type: 'group', label: 'FAQ·고객문의' },
+    { type: 'sub',   label: '상담 예약' },
+    { type: 'sub',   label: '1:1 상담문의' },
+    { type: 'sub',   label: '자주 묻는 질문' },
+    { type: 'group', label: '셀프서비스' },
+    { type: 'sub',   label: '서비스 조회·변경' },
+    { type: 'sub',   label: '요금 조회·납부' },
+    { type: 'sub',   label: '가입번호 조회' },
+  ],
+  '마이페이지': [
+    { type: 'item',  label: '가입정보 조회·변경' },
+    { type: 'item',  label: '이용량 조회' },
+    { type: 'item',  label: '요금 조회 및 납부' },
+    { type: 'item',  label: '요금제·부가서비스 변경' },
+    { type: 'item',  label: '일시·분실 정지' },
+    { type: 'item',  label: '나의 혜택 보기' },
+    { type: 'item',  label: '회원정보 관리' },
+  ]
+};
+
+function renderRnb(menuName) {
+  const items = MENUS[menuName] || [];
+  const chev = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+  let html = '';
+  items.forEach(item => {
+    if (item.type === 'group') {
+      html += `<div class="rnb-group-label">${item.label}</div>`;
+    } else if (item.type === 'sub') {
+      html += `<div class="rnb-item sub" onclick="toast('${item.label}');closeSide()">${item.label}${chev}</div>`;
+    } else {
+      html += `<div class="rnb-item" onclick="toast('${item.label}');closeSide()">${item.label}${chev}</div>`;
+    }
+  });
+  document.getElementById('sideRnb').innerHTML = html;
+}
+
+function selectLnb(el) {
+  document.querySelectorAll('.lnb-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  renderRnb(el.dataset.menu);
+}
+
+function openSide() {
+  renderRnb('가입하기');
+  document.getElementById('sideOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSide() {
+  document.getElementById('sideOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.querySelectorAll('.lnb-item').forEach(i => i.classList.remove('active'));
+  document.querySelector('.lnb-item').classList.add('active');
+}
+function handleOverlayClick(e) {
+  if (!document.getElementById('sidePanel').contains(e.target)) closeSide();
+}
+
+/* ══════════════════════
+   토스트
+══════════════════════ */
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toastEl');
+  el.textContent = '[ ' + msg + ' ]';
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+/* ══════════════════════
+   스크롤 탑
+══════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop')?.classList.toggle('visible', window.scrollY > 400);
+});
+</script>
+</body>
+</html>
